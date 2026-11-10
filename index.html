@@ -120,6 +120,7 @@
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
             border-top: 4px solid var(--primary);
+            display: flex; flex-direction: column;
         }
 
         .card.secondary { border-top-color: var(--secondary); }
@@ -188,6 +189,64 @@
 
         tr:last-child td { border-bottom: none; }
 
+        /* ESTILOS DE LOS BLOQUES DESPLEGABLES (DETAILS) */
+        details {
+            margin-top: auto; /* Empuja hacia abajo */
+            padding-top: 1rem;
+        }
+        
+        summary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.6rem 1rem;
+            background: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            cursor: pointer;
+            list-style: none;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+        summary:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+        
+        summary::before {
+            content: "➕";
+            font-size: 0.8rem;
+        }
+
+        details[open] summary::before {
+            content: "➖";
+        }
+
+        details[open] summary {
+            background: var(--primary-light);
+            color: var(--primary);
+            border-color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .details-content {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .controls {
             position: fixed;
             bottom: calc(20px + env(safe-area-inset-bottom));
@@ -227,6 +286,21 @@
             th, td { padding: 0.8rem; font-size: 0.85rem; }
             .controls button { padding: 12px; font-size: 0.8rem; }
         }
+
+        /* IMPRESIÓN A PDF */
+        @media print {
+            @page { size: landscape; margin: 0; }
+            body, html { overflow: visible !important; background-color: var(--bg-color) !important; height: auto !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            #presentation { display: block !important; height: auto !important; }
+            .slide { position: relative !important; display: flex !important; opacity: 1 !important; visibility: visible !important; page-break-after: always; height: 100vh; width: 100vw; padding: 2rem; box-sizing: border-box; }
+            .controls, .slide-counter, .progress-container { display: none !important; }
+            summary { display: none !important; } /* Ocultar botones al imprimir */
+            details { margin-top: 1rem; padding-top: 0; }
+            details > .details-content { display: block !important; border: none; padding: 0; }
+            details:not([open]) > .details-content { display: block !important; } /* Forzar apertura en PDF */
+            /* Truco para que details siempre esté abierto en PDF */
+            details { open: true; }
+        }
     </style>
 </head>
 <body>
@@ -245,10 +319,11 @@
                 <h1 style="font-size: 2.8rem; margin-bottom: 1rem; border: none;">Psiquiatría Adultos</h1>
                 <h2 style="color: var(--text-muted); font-weight: 400; font-size: 1.3rem; margin-bottom: 2rem;">Guía Interactiva de Casos Clínicos</h2>
                 <div style="background: var(--card-bg); padding: 1.5rem 2rem; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); max-width: 90%;">
-                    <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">57 Diapositivas Completas</p>
+                    <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">53 Diapositivas Interactivas</p>
                     <p style="font-size: 0.95rem;">Depresión • TEPT • Ansiedad • Bipolaridad • Psicosis</p>
                     <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--border);">
                     <p style="font-size: 0.9rem; margin: 0;">📱 Desliza con el dedo o usa las flechas <kbd>←</kbd> <kbd>→</kbd></p>
+                    <p style="font-size: 0.9rem; margin: 0; margin-top: 0.5rem; color: var(--primary); font-weight: bold;">Clic en "➕ Ver explicación detallada" para más información.</p>
                 </div>
             </div>
         </div>
@@ -261,10 +336,26 @@
                     <h3>Hipótesis Monoaminérgica</h3>
                     <p>Déficit de <strong>Serotonina (5-HT)</strong>, <strong>Noradrenalina (NE)</strong> y <strong>Dopamina (DA)</strong>.</p>
                     <p><em>Evidencia:</em> Disminución de 5-HIAA en LCR. Up-regulation de receptores postsinápticos.</p>
+                    <details>
+                        <summary>Ver explicación detallada</summary>
+                        <div class="details-content">
+                            <p><strong>¿Qué significa esto?</strong> La teoría clásica postula que la depresión ocurre por una falta de estos tres neurotransmisores en el espacio sináptico (el espacio entre neuronas).</p>
+                            <p><strong>5-HIAA:</strong> Es el metabólito de la serotonina. Encontrarlo bajo en el líquido cefalorraquídeo (LCR) es una prueba biológica directa de que el cerebro tiene poca serotonina disponible.</p>
+                            <p><strong>Up-regulation:</strong> Como hay pocos neurotransmisores, el cerebro intenta "compensar" creando MÁS receptores en la neurona postsináptica para atrapar cualquier molécula que pase. Los antidepresivos funcionan revirtiendo esto a largo plazo (down-regulation).</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card secondary">
                     <h3>Eje HPA (Estrés)</h3>
                     <p>Hipercortisolemia crónica. El cortisol daña el hipocampo (atrofia) y reduce la neurogénesis.</p>
+                    <details>
+                        <summary>Ver explicación detallada</summary>
+                        <div class="details-content">
+                            <p><strong>El Eje Hipotálamo-Hipófisis-Suprarrenal (HPA):</strong> Es el sistema de respuesta al estrés. En la depresión grave, este eje se queda "encendido" crónicamente, produciendo exceso de cortisol.</p>
+                            <p><strong>Efecto neurotóxico:</strong> El cortisol elevado es tóxico para el hipocampo (área cerebral clave para la memoria y las emociones). Esto explica por qué los pacientes deprimidos tienen problemas de memoria, concentración y por qué el hipocampo se ve más pequeño (atrofia) en las resonancias.</p>
+                            <p><strong>Neurogénesis:</strong> El estrés crónico frena la creación de nuevas neuronas. Los antidepresivos y el ejercicio estimulan esta neurogénesis.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -276,11 +367,27 @@
                     <h3>Hipofunción DLPFC</h3>
                     <p>Corteza Prefrontal Dorsolateral.</p>
                     <p>Asociada a: déficit de concentración, anhedonia, culpa y suicidalidad.</p>
+                    <details>
+                        <summary>Ver explicación detallada</summary>
+                        <div class="details-content">
+                            <p><strong>La Corteza Prefrontal Dorsolateral (DLPFC)</strong> es el "director de orquesta" del cerebro. Se encarga de las funciones ejecutivas: planificar, mantener la atención y regular las emociones.</p>
+                            <p><strong>En la depresión:</strong> Esta área está "apagada" (hipofunción). Por eso el paciente no puede concentrarse, se siente incapaz de tomar decisiones, tiene pensamientos de culpa rumiantes y no siente placer (anhedonia).</p>
+                            <p><strong>Dato clínico:</strong> La Estimulación Magnética Transcraneal (EMT) se aplica justamente sobre esta zona para "reactivarla" en depresiones resistentes.</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card warning">
                     <h3>Hiperactivación de Amígdala</h3>
                     <p>Procesamiento exagerado de emociones negativas.</p>
                     <p>Asociada a: rumiación, miedo, tristeza persistente.</p>
+                    <details>
+                        <summary>Ver explicación detallada</summary>
+                        <div class="details-content">
+                            <p><strong>La Amígdala</strong> es el centro de detección de amenazas y procesamiento del miedo.</p>
+                            <p><strong>En la depresión:</strong> Está "acelerada" (hiperactiva). El paciente interpreta situaciones neutras como negativas, tiene una sensación constante de peligro o catástrofe inminente, y su tristeza es desproporcionada.</p>
+                            <p><strong>Conexión:</strong> La falta de control de la DLPFC sobre la amígdala genera que las emociones negativas secuestren el pensamiento del paciente.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -310,6 +417,14 @@
                         </ul>
                     </div>
                 </div>
+                <details>
+                    <summary>Ver explicación detallada</summary>
+                    <div class="details-content">
+                        <p><strong>¿Por qué 2 semanas?</strong> El DSM-5 exige que los síntomas duren al menos 2 semanas para diferenciar un episodio depresivo mayor de una tristeza normal o un duelo (que suelen tener una duración e intensidad fluctuantes).</p>
+                        <p><strong>El requisito de 5 síntomas:</strong> No basta con estar triste. Se requiere una constelación de síntomas que afecten el cuerpo (sueño, apetito, energía), el pensamiento (concentración, culpa) y las emociones.</p>
+                        <p><strong>Criterio de exclusión:</strong> Los síntomas no deben ser causados por sustancias, medicamentos o enfermedades médicas (ej. hipotiroidismo).</p>
+                    </div>
+                </details>
             </div>
         </div>
 
@@ -320,15 +435,33 @@
                     <h3>1. Ánimo</h3>
                     <p>Tristeza persistente, vacío, desesperanza.</p>
                     <p><strong>Anhedonia:</strong> Pérdida de placer.</p>
+                    <details>
+                        <summary>Ver explicación</summary>
+                        <div class="details-content">
+                            <p><strong>La anhedonia</strong> es el síntoma más específico de la depresión. No es que el paciente "no quiera" hacer cosas, es que su cerebro ha perdido la capacidad de sentir recompensa o placer ante estímulos que antes sí le gustaban (comer, sexo, música).</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card secondary">
                     <h3>2. Pensamiento</h3>
                     <p><strong>Bradipsiquia:</strong> Enlentecimiento.</p>
                     <p>Bloqueos, ideas de ruina.</p>
+                    <details>
+                        <summary>Ver explicación</summary>
+                        <div class="details-content">
+                            <p><strong>Bradipsiquia:</strong> El pensamiento se vuelve "lento" y "espeso". El paciente tarda en procesar la información, tarda en hablar y siente que su mente está en blanco. Es un signo de gravedad biológica.</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card accent">
                     <h3>3. Volición</h3>
                     <p>Inhibición psicomotora (lentitud) o agitación. <em>Los signos más objetivos son energía y psicomotricidad.</em></p>
+                    <details>
+                        <summary>Ver explicación</summary>
+                        <div class="details-content">
+                            <p><strong>Psicomotricidad:</strong> La forma en que el cuerpo se mueve. En la depresión grave, el paciente camina lento, habla bajo, no se mueve (inhibición). En otros casos, está inquieto, se retuerce las manos, no puede quedarse quieto (agitación).</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -340,10 +473,22 @@
                 <div class="card">
                     <h3>Vitales</h3>
                     <p>Vigor, fatiga, bienestar general. <strong>Afectados en depresión melancólica.</strong></p>
+                    <details>
+                        <summary>Ver explicación</summary>
+                        <div class="details-content">
+                            <p><strong>Sentimientos Vitales:</strong> Son los que sentimos en el cuerpo (la "energía vital"). En la depresión melancólica, el paciente siente que su cuerpo está "enfermo", "pesado" o "vacío". No es solo tristeza, es una pérdida total de la fuerza biológica.</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card secondary">
                     <h3>Psíquicos</h3>
                     <p>Amor, tristeza, miedo, esperanza. <strong>Afectados en depresión neurótica.</strong></p>
+                    <details>
+                        <summary>Ver explicación</summary>
+                        <div class="details-content">
+                            <p><strong>Sentimientos Psíquicos:</strong> Son los relacionados con la historia personal y los eventos (amor, rencor, tristeza por un duelo). En la depresión neurótica (reactiva), el paciente está triste porque le ocurrió algo malo, pero su energía vital sigue intacta.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -360,8 +505,14 @@
                         <li>Pérdida de peso.</li>
                         <li>Ideas de ruina/Cotard.</li>
                         <li>Sin reactividad anímica.</li>
-                        <li><strong>Tto:</strong> TEC, antidepresivos.</li>
+                        <li><strong>Tratamiento:</strong> Terapia Electroconvulsiva (TEC), antidepresivos.</li>
                     </ul>
+                    <details>
+                        <summary>Ver explicación clínica</summary>
+                        <div class="details-content">
+                            <p>También llamada "depresión con características psicóticas o melancólicas". El paciente está totalmente desconectado de la realidad externa. <strong>No mejora con nada.</strong> Aunque gane la lotería, seguirá profundamente triste. La catatonía es un estado de inmovilidad total y mutismo.</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card secondary">
                     <span class="badge blue">Reactiva</span>
@@ -371,8 +522,14 @@
                         <li>Sin inhibición grave.</li>
                         <li>Alta sensibilidad a estrés.</li>
                         <li>Cronicidad.</li>
-                        <li><strong>Tto:</strong> Psicoterapia.</li>
+                        <li><strong>Tratamiento:</strong> Psicoterapia.</li>
                     </ul>
+                    <details>
+                        <summary>Ver explicación clínica</summary>
+                        <div class="details-content">
+                            <p>Aparece tras un evento vital estresante (divorcio, pérdida de trabajo). El paciente sí tiene reactividad (se ríe si algo es gracioso, aunque luego vuelva la tristeza). El tratamiento principal es la psicoterapia, ya que la causa es psicosocial y no solo biológica.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -384,6 +541,12 @@
                     <h3>Depresión Mixta (Koukopoulos)</h3>
                     <p>Depresión + ≥3 síntomas maníacos: irritabilidad, pensamiento acelerado, agitación.</p>
                     <p><strong>Alto riesgo suicida. Sugiere Bipolaridad.</strong></p>
+                    <details>
+                        <summary>Ver explicación clínica</summary>
+                        <div class="details-content">
+                            <p>El paciente está profundamente triste, pero su cerebro está "acelerado". Tiene ideas de muerte pero también mucha energía para llevarlas a cabo. <strong>Es el mayor factor de riesgo de suicidio.</strong> Si le das un antidepresivo solo, se empeora. Se debe tratar como un Trastorno Bipolar (con estabilizadores del ánimo como el Litio).</p>
+                        </div>
+                    </details>
                 </div>
                 <div class="card purple">
                     <h3>Depresión Atípica</h3>
@@ -394,6 +557,12 @@
                         <li>Parálisis plúmbea.</li>
                         <li>Sensibilidad al rechazo.</li>
                     </ul>
+                    <details>
+                        <summary>Ver explicación clínica</summary>
+                        <div class="details-content">
+                            <p><strong>Parálisis plúmbea:</strong> Sensación de que los brazos y piernas pesan como el plomo. Duermen 12 horas y no descansan. Comen compulsivamente (especialmente carbohidratos). A diferencia de la melancólica, si les pasa algo bueno, se animan momentáneamente.</p>
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>
@@ -419,6 +588,14 @@
                     <p><strong>TEC de elección.</strong> Respuesta en días.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver detalles del protocolo GES</summary>
+                <div class="details-content">
+                    <p><strong>ISRS:</strong> Inhibidores Selectivos de la Recaptación de Serotonina (Ej. Sertralina, Fluoxetina). Se usan como primera línea por sus pocos efectos secundarios comparados con fármacos antiguos.</p>
+                    <p><strong>TCC:</strong> Terapia Cognitivo-Conductual. Ayuda a identificar y cambiar los patrones de pensamiento negativo y las conductas de evitación.</p>
+                    <p><strong>Profilaxis:</strong> Si el paciente ha tenido 3 o más episodios en su vida, el riesgo de recaída es altísimo, por lo que se recomienda mantener el fármaco de por vida para evitar la cronicidad y el suicidio.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -443,6 +620,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación detallada</summary>
+                <div class="details-content">
+                    <p><strong>Desmitificando el TEC:</strong> No es como en las películas. El paciente está dormido (anestesia general) y paralizado (relajante muscular). La convulsión es cerebral, no física (solo se ve temblar un dedo del pie).</p>
+                    <p><strong>¿Por qué funciona?</strong> La electricidad induce una crisis convulsiva controlada que "reinicia" la neuroquímica del cerebro, aumentando factores neurotróficos (como el BDNF) y mejorando la plasticidad neuronal. Es el tratamiento más efectivo y rápido que existe en psiquiatría para salvar vidas.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -460,6 +644,13 @@
                     <p><strong>Conducta:</strong> Evaluar riesgo. ISRS + TCC.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>¿Por qué es depresión mayor y no duelo?</strong> Porque dura 3 meses (el duelo normal suele ser más corto, aunque puede durar hasta 1 año), afecta su funcionalidad laboral y presenta ideación de muerte.</p>
+                    <p><strong>¿Por qué no es bipolaridad?</strong> No hay antecedentes de episodios de manía o hipomanía (ánimo elevado, falta de sueño, hiperactividad).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -477,6 +668,13 @@
                     <p><strong>Conducta:</strong> Hospitalización. <strong>TEC urgente.</strong></p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Signos de gravedad:</strong> La negativa a alimentarse (llevando a 21 kg de pérdida) y el mutismo indican catatonía. La paciente está en riesgo vital inminente.</p>
+                    <p><strong>¿Por qué no darle solo pastillas?</strong> El paciente catatónico no traga, no absorbe bien los fármacos y no tiene el tiempo biológico para esperar 4 semanas a que el antidepresivo haga efecto. La TEC actúa en días y puede revertir el cuadro salvando su vida.</p>
+                </div>
+            </details>
         </div>
 
         <!-- ==================== MÓDULO 2: TEPT ==================== -->
@@ -496,6 +694,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación detallada</summary>
+                <div class="details-content">
+                    <p><strong>¿Qué es un trauma?</strong> No es cualquier cosa mala que te pasa. Es un evento que amenaza la vida o la integridad física (propia o de otros) y que genera un miedo, horror o desesperanza intensos. Ej: asaltos, violaciones, accidentes graves, terremotos, guerras.</p>
+                    <p><strong>¿Por qué el trauma intencional es peor?</strong> Porque si un terremoto te quita la casa, es la naturaleza. Pero si un humano te hace daño deliberadamente (abuso, tortura, asalto), genera una traición a la confianza básica, lo que tiene un impacto psicológico mucho más profundo.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -514,6 +719,14 @@
                     <p>Sobregeneralización del miedo.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación detallada</summary>
+                <div class="details-content">
+                    <p><strong>Amígdala:</strong> Está siempre encendida. El paciente vive en estado de alerta roja (hipervigilancia). Un ruido de auto de repente suena como un disparo.</p>
+                    <p><strong>Corteza Prefrontal:</strong> Es el freno. En el TEPT, este freno falla, por lo que la amígdala no se apaga nunca.</p>
+                    <p><strong>Hipocampo:</strong> Es el archivador. Guarda los recuerdos con su contexto (fecha y hora). En el TEPT, el archivador está roto. El cerebro no sabe que el trauma ya pasó y reacciona como si estuviera ocurriendo AHORA.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -549,6 +762,14 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Flashbacks:</strong> No es solo recordar. Es sentir que el evento está pasando otra vez. El paciente puede oler, ver o sentir el trauma.</p>
+                    <p><strong>Evitación:</strong> El paciente deja de salir, de manejar, de ver amigos. Su mundo se hace cada vez más pequeño.</p>
+                    <p><strong>Amnesia disociativa:</strong> El cerebro borra partes del trauma para protegerse del dolor.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -571,6 +792,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>¿Qué es el TEPT Complejo?</strong> Ocurre cuando el trauma fue crónico, repetitivo y ocurrió en etapas clave del desarrollo (ej. abuso sexual infantil prolongado). No solo afecta el miedo, afecta la formación de la personalidad entera.</p>
+                    <p><strong>Diferencia con el Trastorno Límite de la Personalidad (TLP):</strong> En el TLP el paciente tiene una identidad inestable (hoy soy bueno, mañana malo) y relaciones caóticas (te amo, te odio). En el TEPT Complejo, el paciente tiene una identidad consistentemente negativa ("siempre fui un inútil") y evita las relaciones por miedo a ser dañado.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -593,6 +821,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación de terapias</summary>
+                <div class="details-content">
+                    <p><strong>EMDR (Desensibilización y Reprocesamiento por Movimientos Oculares):</strong> El paciente recuerda el trauma mientras sigue con los ojos los dedos del terapeuta. Esto estimula ambos hemisferios cerebrales y ayuda a "reprocesar" el recuerdo, despojándolo de la carga emocional.</p>
+                    <p><strong>Prazosina:</strong> Es un fármaco para la presión arterial que, por casualidad, bloquea la noradrenalina durante la noche, eliminando las pesadillas.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -610,6 +845,12 @@
                     <p><strong>Conducta:</strong> Psicoterapia (TCC trauma). ISRS. Prazosina.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>¿Por qué no es Trastorno de Estrés Agudo?</strong> El Trastorno de Estrés Agudo se diagnostica entre 3 días y 1 mes post-trauma. Este paciente lleva 2 meses, por lo que ya califica como TEPT (Trastorno de Estrés Postraumático).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -627,6 +868,12 @@
                     <p><strong>Conducta:</strong> Psicoterapia especializada largo plazo.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Clave diagnóstica:</strong> El trauma no fue un evento único, sino crónico (abuso en la infancia). Además de los síntomas clásicos de TEPT, hay un daño en la forma en que se ve a sí misma ("soy un fracaso") y en cómo se relaciona (evita a todos).</p>
+                </div>
+            </details>
         </div>
 
         <!-- ==================== MÓDULO 3: ANSIEDAD ==================== -->
@@ -650,6 +897,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación</summary>
+                <div class="details-content">
+                    <p><strong>Egosintónica:</strong> Significa que la persona siente que la ansiedad "está de acuerdo" con su situación (ej. estudiar para una prueba da ansiedad, pero es aceptable). La ansiedad patológica es "egodistónica", la persona siente que la ansiedad es ajena, exagerada e incontrolable.</p>
+                    <p><strong>La ansiedad es una emoción normal y necesaria.</strong> Nos prepara para huir o luchar. El problema es cuando el "alarma" se activa sin fuego.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -664,6 +918,13 @@
                     <p>ISRS + TCC. Concepto de <strong>Metapreocupación</strong>.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Metapreocupación:</strong> Es el núcleo del TAG. El paciente se preocupa por estar preocupado. Piensa: "¿Y si me desmayo en el trabajo? ¿Y si me da un infarto? ¿Y si mi preocupación me vuelve loco?". Esto genera un círculo vicioso que no tiene fin.</p>
+                    <p><strong>Diferencia con el pánico:</strong> En el TAG la ansiedad es "flotante" y constante (estoy nervioso todo el día por todo). En el pánico, son ataques bruscos y súbitos.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -678,6 +939,14 @@
                     <p>Miedo a lugares donde escapar es difícil (transporte, multitudes). Evitación.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>La crisis de pánico:</strong> El cuerpo se prepara para morir o volverse loco. El corazón se acelera, falta el aire, hay mareo. Es una falsa alarma de ahogamiento o infarto.</p>
+                    <p><strong>El círculo del pánico:</strong> El paciente siente una palpitación normal (por café o esfuerzo) y piensa "¡Me va a dar un infarto!". Ese pensamiento catastrófico genera más adrenalina, lo que genera más palpitaciones, lo que confirma el pensamiento. Es un bucle.</p>
+                    <p><strong>Agorafobia:</strong> No es miedo a los espacios abiertos, es miedo a no poder escapar o no tener ayuda si te da un ataque.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -685,13 +954,21 @@
             <div class="grid-2">
                 <div class="card">
                     <h3>Fobia Social</h3>
-                    <p>Miedo al juicio. Tto: TCC + ISRS.</p>
+                    <p>Miedo al juicio. Tratamiento: TCC + ISRS.</p>
                 </div>
                 <div class="card secondary">
                     <h3>TOC</h3>
-                    <p>Obsesión + Compulsión. Circuito OFC-Caudado. Tto: ISRS altas dosis + EPR.</p>
+                    <p>Obsesión + Compulsión. Circuito OFC-Caudado. Tratamiento: ISRS altas dosis + EPR.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Fobia Social:</strong> No es solo timidez. Es un terror paralizante a ser humillado o juzgado. El paciente suda, tiembla y se sonroja, y sabe que es irracional, pero no puede evitarlo.</p>
+                    <p><strong>TOC:</strong> El paciente tiene pensamientos horribles (obsesiones) que le causan ansiedad, y hace rituales (compulsiones) para neutralizarlos. Ej: piensa que va a matar a su madre, entonces reza 10 veces para evitar que ocurra.</p>
+                    <p><strong>EPR (Exposición con Prevención de Respuesta):</strong> Es la terapia del TOC. Se expone al paciente a lo que le da miedo (ej. tocar un picaporte) pero se le PROHÍBE hacer el ritual (ej. lavarse las manos). Así el cerebro aprende que no pasa nada malo.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -708,6 +985,13 @@
                     <p><strong>Conducta:</strong> Psicoeducación. ISRS + TCC.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Diagnóstico doble:</strong> Se le diagnostica Trastorno de Pánico (por las crisis) y Agorafobia (porque dejó de ir al supermercado y metro para evitar tener una crisis ahí).</p>
+                    <p><strong>Importante:</strong> Antes de diagnosticar pánico, hay que descartar causas médicas (hipertiroidismo, arritmias, feocromocitoma).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -724,6 +1008,13 @@
                     <p><strong>Conducta:</strong> ISRS dosis altas + TCC (EPR).</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>El insight:</strong> La paciente sabe que los gérmenes no son tan peligrosos y que lavarse 50 veces es excesivo, pero no puede detenerse. Eso es la característica clave del TOC (egodistónico).</p>
+                    <p><strong>Dosis de ISRS:</strong> En el TOC, los ISRS requieren dosis más altas y más tiempo (10-12 semanas) que en la depresión para hacer efecto.</p>
+                </div>
+            </details>
         </div>
 
         <!-- ==================== MÓDULO 4: BIPOLAR ==================== -->
@@ -739,16 +1030,30 @@
                     <p>Heredabilidad 60-80%. Ritmos circadianos, BDNF.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Ad integrum:</strong> Significa que entre episodios, el paciente vuelve a ser COMPLETAMENTE el mismo que era antes de la enfermedad. No hay deterioro cognitivo progresivo (a diferencia de la esquizofrenia).</p>
+                    <p><strong>BDNF:</strong> Factor Neurotrófico Derivado del Cerebro. Es una proteína que ayuda a las neuronas a crecer y sobrevivir. En la bipolaridad está desregulada, lo que afecta la plasticidad cerebral. El Litio ayuda a aumentarlo.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
             <h1>Mania vs. Hipomanía</h1>
             <table>
-                <tr><th>Criterio</th><th>Mania (BP I)</th><th>Hipomanía (BP II)</th></tr>
+                <tr><th>Criterio</th><th>Mania (Bipolar I)</th><th>Hipomanía (Bipolar II)</th></tr>
                 <tr><td>Duración</td><td>≥1 semana</td><td>≥4 días</td></tr>
                 <tr><td>Deterioro</td><td>Marcado</td><td>No marcado</td></tr>
                 <tr><td>Psicosis</td><td>Puede</td><td>No</td></tr>
             </table>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Mania:</strong> El paciente no puede trabajar, se arruina económicamente (compra autos, regala cosas), es hospitalizado o tiene delirios. Dura más de 1 semana.</p>
+                    <p><strong>Hipomanía:</strong> El paciente está "demasiado contento", duerme poco, habla mucho, es productivo y sociable. No necesita hospitalización y no rompe su vida (aunque a veces se mete en problemas menores). Dura al menos 4 días. Para diagnosticar Bipolar II, debe tener además depresiones graves.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -763,6 +1068,12 @@
                     <p>Sospechar bipolaridad si hay >3 episodios, matrimonios, fracasos terapéuticos, profesiones.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Regla de Akiskal:</strong> Es una regla clínica para detectar pacientes bipolares que están mal diagnosticados como depresivos unipolares. Si un paciente tiene: más de 3 episodios depresivos, más de 3 fracasos matrimoniales, más de 3 profesiones distintas (porque se aburre rápido) o más de 3 fracasos con antidepresivos, hay que sospechar que en realidad es Bipolar.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -779,6 +1090,13 @@
                     <p><strong>Conducta:</strong> Hospitalizar. Litio/Valproato + Atípico.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Síntomas de manía clásica:</strong> Disminución de la necesidad de dormir (no es insomnio, es que no tiene sueño), verborrea (habla sin parar), grandiosidad (proyectos irreales) y delirios (dice ser Dios).</p>
+                    <p><strong>¿Por qué hospitalizar?</strong> Porque tiene psicosis y está en riesgo (puede gastar toda su fortuna o lastimarse).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -795,16 +1113,27 @@
                     <p><strong>Conducta:</strong> Suspender antidepresivos. Litio/Lamotrigina.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>La trampa del Bipolar II:</strong> El paciente casi nunca consulta por la hipomanía (se siente bien, es productivo). Consulta por la depresión.</p>
+                    <p><strong>El problema:</strong> Si le das solo antidepresivos, el paciente no mejora (fracaso 1, 2 y 3) o puede "virar" y desencadenar una manía o episodio mixto. Por eso se usan estabilizadores del ánimo (Litio) o Lamotrigina (que es mejor para la fase depresiva).</p>
+                </div>
+            </details>
         </div>
 
         <!-- ==================== MÓDULO 5: PSICOSIS ==================== -->
         <div class="slide">
             <h1>Psicosis: Las 4 A de Bleuler</h1>
             <div class="grid-2">
-                <div class="card"><h3>Asociación Laxa</h3><p>Pensamiento incoherente.</p></div>
-                <div class="card secondary"><h3>Afectividad Embotada</h3><p>Aplanamiento emocional.</p></div>
-                <div class="card accent"><h3>Autismo</h3><p>Retraimiento.</p></div>
-                <div class="card"><h3>Ambivalencia</h3><p>Ideas contradictorias.</p></div>
+                <div class="card"><h3>Asociación Laxa</h3><p>Pensamiento incoherente.</p>
+                <details><summary>Ver explicación</summary><div class="details-content">La persona pierde la capacidad de conectar ideas de forma lógica. Salta de un tema a otro sin sentido (descarrilamiento).</div></details></div>
+                <div class="card secondary"><h3>Afectividad Embotada</h3><p>Aplanamiento emocional.</p>
+                <details><summary>Ver explicación</summary><div class="details-content">El paciente no muestra emociones. Puede contar algo trágico o aterrador con una cara de piedra total (aplanamiento afectivo).</div></details></div>
+                <div class="card accent"><h3>Autismo</h3><p>Retraimiento.</p>
+                <details><summary>Ver explicación</summary><div class="details-content">No es el autismo del desarrollo. Es un cierre total al mundo externo. El paciente vive en su mundo interno de delirios y alucinaciones.</div></details></div>
+                <div class="card"><h3>Ambivalencia</h3><p>Ideas contradictorias.</p>
+                <details><summary>Ver explicación</summary><div class="details-content">El paciente dice "sí" y "no" al mismo tiempo. "Mi mamá es mi mamá, pero en realidad es una impostora".</div></details></div>
             </div>
         </div>
 
@@ -814,10 +1143,12 @@
                 <div class="card">
                     <h3>Delirios</h3>
                     <p>Certeza absoluta. Capgras (impostor), Cotard (muerto), Frégoli (conocido).</p>
+                    <details><summary>Ver explicación</summary><div class="details-content"><strong>Capgras:</strong> "Mi esposa fue reemplazada por un robot idéntico".<br><strong>Cotard:</strong> "Estoy muerto, me están podriendo los órganos" (típico de depresión grave).<br><strong>Frégoli:</strong> "El guardia de seguridad es en realidad mi hermano disfrazado".</div></details>
                 </div>
                 <div class="card secondary">
                     <h3>Alucinaciones</h3>
                     <p>Auditivas (esquizofrenia), Visuales (orgánico). Pseudoalucinaciones (con insight).</p>
+                    <details><summary>Ver explicación</summary><div class="details-content"><strong>Auditivas:</strong> Escuchar voces que comentan lo que haces o discuten entre ellas. Es clásico de la esquizofrenia.<br><strong>Visuales:</strong> Ver cosas que no están. Casi siempre indican causa orgánica (tumor, demencia, drogas).</div></details>
                 </div>
             </div>
         </div>
@@ -831,6 +1162,15 @@
                 <tr><td>Nigroestriatal</td><td>Control motor</td><td>Extrapiramidalismo</td></tr>
                 <tr><td>Tuberoinfundibular</td><td>Inhibe prolactina</td><td>Hiperprolactinemia</td></tr>
             </table>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Mesolímbica:</strong> Aquí se generan los delirios y las voces (síntomas positivos). Los antipsicóticos bloquean esta vía (efecto terapéutico).</p>
+                    <p><strong>Mesocortical:</strong> Aquí está la falta de dopamina. Esto genera apatía y aislamiento (síntomas negativos). Los antipsicóticos empeoran esto.</p>
+                    <p><strong>Nigroestriatal:</strong> Controla el movimiento. Bloquearla causa temblor y rigidez (efectos adversos extrapiramidales).</p>
+                    <p><strong>Tuberoinfundibular:</strong> Controla la prolactina. Bloquearla causa galactorrea (salida de leche) y amenorrea (falta de regla).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -851,6 +1191,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>La regla del tiempo:</strong> La esquizofrenia requiere 6 meses de síntomas continuos. Si dura menos, es Esquizofreniforme (1-6 meses) o Psicótico Breve (menos de 1 mes, usualmente por estrés enorme).</p>
+                    <p><strong>Trastorno Delirante (Paranoia):</strong> El paciente tiene una vida completamente normal, trabaja, se relaciona, pero tiene un delirio fijo (ej. "mi vecino me quiere envenenar"). Inicio tardío (>40 años).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -867,6 +1214,13 @@
                     <p><strong>Conducta:</strong> Antipsicótico atípico. Psicoeducación.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Quiebre vital:</strong> El paciente era un joven normal y de repente se aisló, dejó de estudiar y se descuidó. Eso es la esencia de la esquizofrenia.</p>
+                    <p><strong>Sin insight:</strong> Él no cree que esté enfermo, cree que las ondas son reales. Por eso es tan difícil que acepte tratamiento (hay que usar psicoeducación y a veces medicación inyectable de depósito).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -883,6 +1237,13 @@
                     <p><strong>Conducta:</strong> Hospitalizar, exámenes, tratar causa.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Pistas de organicidad:</strong> Edad mayor de 40 años, inicio agudo (3 días), fiebre, fármaco nuevo y alucinaciones visuales (ver insectos).</p>
+                    <p><strong>El delirium:</strong> Es una alteración de la conciencia. El paciente está desorientado y confuso. Hay que buscar la causa médica (infección, abstinencia, reacción adversa a medicamentos). No es esquizofrenia.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -899,10 +1260,16 @@
                     <p><strong>Conducta:</strong> Alianza terapéutica. Antipsicótico dosis bajas.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>Delirio encapsulado:</strong> La paciente solo está loca con el tema del vecino. En todo lo demás (trabajo, familia, finanzas) es una persona totalmente funcional y lógica. Esto es típico de la paranoia.</p>
+                    <p><strong>Dificultad:</strong> No aceptan tratamiento porque no creen que estén enfermas. La hospitalización es muy difícil. Se usan antipsicóticos inyectables de larga duración disimulados.</p>
+                </div>
+            </details>
         </div>
 
-        <!-- SLIDES COMPLEMENTARIAS PARA LLEGAR A 57 -->
-        
+        <!-- SLIDES COMPLEMENTARIAS -->
         <div class="slide">
             <h1>Manejo de la Psicosis</h1>
             <table>
@@ -912,6 +1279,12 @@
                 <tr><td>Quetiapina</td><td>25-600 mg/día</td><td>Sedante</td></tr>
                 <tr><td>Clozapina</td><td>100-900 mg/día</td><td>Refractario, riesgo agranulocitosis</td></tr>
             </table>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Agranulocitosis:</strong> Es el efecto adverso más grave de la Clozapina. El paciente pierde los glóbulos blancos y puede morir de una infección. Por eso se requiere un examen de sangre (hemograma) todas las semanas al principio. Se usa solo cuando fallan los otros 2 antipsicóticos.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -925,6 +1298,13 @@
                     <li><strong>Sonorización del pensamiento.</strong></li>
                 </ul>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>¿Qué son?</strong> Son un conjunto de síntomas que, según el psiquiatra Kurt Schneider, eran altamente específicos de la esquizofrenia (aunque hoy sabemos que también aparecen en otras psicosis).</p>
+                    <p><strong>Ejemplo:</strong> El paciente cree que le quitan sus pensamientos o que otros le meten ideas a la cabeza. O que sus pensamientos se escuchan en voz alta. Son alteraciones de los límites del Yo (yo soy yo, el mundo es el mundo).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -948,6 +1328,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación detallada</summary>
+                <div class="details-content">
+                    <p><strong>La regla del consumo:</strong> Si un joven de 20 años llega psicótico y fuma marihuana todos los días, la primera sospecha es que la marihuana le desencadenó la psicosis. No es esquizofrenia hasta que pasan 6 meses sin consumir y sigue con síntomas.</p>
+                    <p><strong>La regla de la edad:</strong> La esquizofrenia típicamente debuta entre los 15 y 25 años. Si alguien de 45 o 60 años empieza a tener alucinaciones o delirios, es casi seguro un problema médico (tumor, ACV, demencia, infección).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -981,6 +1368,12 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>El pronóstico:</strong> Un paciente con Bipolaridad puede tener un episodio maníaco, ser hospitalizado, pero a las semanas vuelve a ser el mismo profesional exitoso de antes. Un paciente con Esquizofrenia, tras el primer brote, sufre un "quiebre vital": nunca vuelve a ser el mismo, abandona los estudios, pierde habilidades sociales y queda con síntomas negativos crónicos.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -997,6 +1390,13 @@
                     <p><strong>Conducta:</strong> Evaluar riesgo suicida. No usar antidepresivos solos. Iniciar estabilizador.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver análisis del caso</summary>
+                <div class="details-content">
+                    <p><strong>El peligro:</strong> Tiene el deseo de morir de la depresión (ideación suicida) y la energía física y la impulsividad de la manía (no puede quedarse quieto). Esto lo hace extremadamente propenso a intentar suicidarse con alta letalidad.</p>
+                    <p><strong>Conducta médica:</strong> La hospitalización suele ser necesaria. Se usan antipsicóticos atípicos y estabilizadores del ánimo (Litio, Valproato).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -1004,6 +1404,12 @@
             <div class="card" style="width: 100%;">
                 <p>El DSM-5 usado como checklist sobredimensiona la depresión. Ejemplo: en época de exámenes, cualquier estudiante cumple 4-5 criterios (fatiga, insomnio, concentración).</p>
                 <p><strong>Consecuencia:</strong> Se medicaliza la salud mental. Siempre evaluar el contexto y la funcionalidad.</p>
+                <details>
+                    <summary>Ver explicación clínica</summary>
+                    <div class="details-content">
+                        <p><strong>El diagnóstico es clínico:</strong> No existen exámenes de sangre para la depresión. El DSM-5 es una guía, no una biblia. Hay que evaluar si los síntomas causan un <strong>sufrimiento clínicamente significativo</strong> o un <strong>deterioro funcional</strong>. Si alguien está fatigado porque estudió toda la noche, no tiene depresión mayor, tiene sueño.</p>
+                    </div>
+                </details>
             </div>
         </div>
 
@@ -1023,6 +1429,13 @@
                     </ul>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Síndrome serotoninérgico:</strong> Ocurre cuando hay demasiada serotonina (ej. combinando dos antidepresivos). Causa fiebre, temblor, sudoración, confusión, diarrea. Puede ser mortal. Es raro pero hay que saberlo.</p>
+                    <p><strong>Disfunción sexual:</strong> Es el efecto adverso que más hace abandonar el tratamiento. El paciente siente que pierde la libido o tiene dificultad para llegar al orgasmo. Se puede manejar bajando la dosis o cambiando a otro fármaco (como Bupropión).</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -1030,6 +1443,13 @@
             <div class="card warning" style="width: 100%;">
                 <p>El litio tiene un margen terapéutico estrecho. Requiere monitoreo de litemia, función renal y tiroidea.</p>
                 <p><strong>Toxicidad:</strong> Temblor grueso, ataxia, vómitos, diarrea, confusión.</p>
+                <details>
+                    <summary>Ver explicación clínica</summary>
+                    <div class="details-content">
+                        <p><strong>Margen estrecho:</strong> Significa que la diferencia entre la dosis terapéutica (que cura) y la dosis tóxica (que mata) es muy pequeña. Una deshidratación leve (gripe, diarrea) puede elevar el litio a niveles tóxicos.</p>
+                        <p><strong>Exámenes:</strong> Se debe medir la litemia (nivel en sangre) cada cierto tiempo. También medir el riñón (porque el litio se elimina por ahí) y el tiroides (porque el litio puede causar hipotiroidismo).</p>
+                    </div>
+                </details>
             </div>
         </div>
 
@@ -1043,6 +1463,12 @@
                     <li>Tumores cerebrales.</li>
                     <li>Sustancias (alucinógenos, delirium tremens).</li>
                 </ul>
+                <details>
+                    <summary>Ver explicación clínica</summary>
+                    <div class="details-content">
+                        <p><strong>La regla de oro:</strong> Si un paciente dice "veo personas que no están", lo primero que debes hacer es un TAC o una resonancia y un perfil de drogas. En la esquizofrenia las voces son auditivas (oír voces). Ver cosas es señal de daño cerebral orgánico o intoxicación.</p>
+                    </div>
+                </details>
             </div>
         </div>
 
@@ -1063,6 +1489,13 @@
                     <p><strong>Tratamiento urgente:</strong> TEC o benzodiacepinas.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Flexibilidad céreo:</strong> El médico mueve el brazo del paciente a una posición incómoda (ej. levantado en el aire) y el paciente lo deja así por minutos u horas. Como si fuera de cera.</p>
+                    <p><strong>Es una urgencia médica:</strong> El paciente no come ni bebe, puede morir de deshidratación o trombosis (por estar inmóvil). Se debe tratar de inmediato con TEC o benzodiacepinas intravenosas.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -1074,6 +1507,13 @@
                     <li><strong>Factores:</strong> Intentos previos, desesperanza, aislamiento.</li>
                     <li><strong>Conducta:</strong> Si hay riesgo alto, hospitalización inmediata.</li>
                 </ul>
+                <details>
+                    <summary>Ver explicación clínica</summary>
+                    <div class="details-content">
+                        <p><strong>No tener miedo de preguntar:</strong> Preguntar por el suicidio NO "planta la idea" en la cabeza del paciente. Al contrario, le da alivio al poder hablarlo.</p>
+                        <p><strong>Factores de riesgo claves:</strong> Haber tenido un intento previo (el factor más importante), tener un plan con un método letal (ej. arma de fuego), tener acceso al método, desesperanza extrema y estar soltero/aislado. Si el paciente dice "quiero morir, ya compré las pastillas y es hoy", se hospitaliza sin importar lo que diga.</p>
+                    </div>
+                </details>
             </div>
         </div>
 
@@ -1083,6 +1523,12 @@
                 <p>Coexistencia de síntomas psicóticos y afectivos (manía o depresión).</p>
                 <p><strong>Diferencia clave:</strong> La psicosis persiste por ≥2 semanas en ausencia de síntomas afectivos significativos.</p>
                 <p><em>Si los síntomas psicóticos desaparecen al remitir el ánimo, es un trastorno afectivo con síntomas psicóticos.</em></p>
+                <details>
+                    <summary>Ver explicación clínica</summary>
+                    <div class="details-content">
+                        <p><strong>El diagnóstico temporal:</strong> Primero tiene una manía (o depresión) con voces. Se trata la manía, el ánimo se estabiliza... pero las voces SIGUEN ahí. Eso es esquizoafectivo. El paciente está en la frontera entre la esquizofrenia y el trastorno bipolar.</p>
+                    </div>
+                </details>
             </div>
         </div>
 
@@ -1098,6 +1544,13 @@
                     <p>TCC con exposición gradual. Fármacos no son útiles.</p>
                 </div>
             </div>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>Exposición gradual:</strong> Si le tienes fobia a las arañas, no te van a tirar una araña gigante en la primera sesión. Primero ves una foto, luego una araña pequeña en un frasco, luego la tocas. El cerebro aprende a desensibilizarse y a ver que no hay peligro real.</p>
+                    <p><strong>Fármacos:</strong> No sirven. No puedes tomar una pastilla todos los días para no tenerle miedo a volar en avión. La terapia es la solución.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -1108,6 +1561,13 @@
                 <tr><td>Compulsión</td><td>Ritual para bajar ansiedad</td><td>Evitación</td></tr>
                 <tr><td>Neurobiología</td><td>OFC-Caudado</td><td>Amígdala-Hipocampo</td></tr>
             </table>
+            <details style="margin-top: 1rem;">
+                <summary>Ver explicación clínica</summary>
+                <div class="details-content">
+                    <p><strong>En el TOC:</strong> El pensamiento es irracional (ej. "voy a contaminar a todos") y no viene de un trauma real. La compulsión (lavarse las manos) es un ritual para calmar la ansiedad de ese pensamiento.</p>
+                    <p><strong>En el TEPT:</strong> Todo gira en torno a un evento real que ocurrió en el pasado. El paciente no lava nada, simplemente evita el lugar donde ocurrió el trauma.</p>
+                </div>
+            </details>
         </div>
 
         <div class="slide">
@@ -1115,7 +1575,7 @@
             <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
                 <h1 style="border: none; font-size: 2.5rem; color: var(--primary);">¡Mucho Éxito!</h1>
                 <p style="font-size: 1.1rem; color: var(--text-muted); margin-top: 1rem; max-width: 80%;">
-                    Has completado las 57 diapositivas de estudio. Recuerda que en psiquiatría el diagnóstico es clínico y la entrevista es tu mejor herramienta.
+                    Has completado las 53 diapositivas de estudio. Recuerda que en psiquiatría el diagnóstico es clínico y la entrevista es tu mejor herramienta.
                 </p>
             </div>
         </div>
@@ -1123,7 +1583,7 @@
     </div>
 
     <!-- CONTROLES -->
-    <div class="slide-counter" id="counter">1 / 57</div>
+    <div class="slide-counter" id="counter">1 / 53</div>
     <div class="controls">
         <button onclick="toggleFullScreen()" id="fs-btn" title="Pantalla Completa">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
