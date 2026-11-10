@@ -31,96 +31,73 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
+        /* MODO OSCURO */
+        body.dark-mode {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --border: #334155;
+            --primary-light: #082f49;
+            --secondary-light: #064e3b;
+            --accent-light: #4c0519;
+            --warning-light: #451a03;
+            --purple-light: #2e1065;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
         body, html {
-            height: 100%;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow: hidden;
-            -webkit-text-size-adjust: 100%;
-            touch-action: pan-y;
+            height: 100%; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color); color: var(--text-main);
+            overflow: hidden; -webkit-text-size-adjust: 100%; touch-action: pan-y;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Barra de Progreso */
-        .progress-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 4px;
-            background: var(--border);
-            z-index: 2000;
-        }
-        .progress-bar {
-            height: 100%;
-            background: var(--primary);
-            transition: width 0.3s ease;
-            width: 0%;
+        /* Barra de Progreso y Herramientas */
+        .top-toolbar {
+            position: fixed; top: 4px; right: 0; width: 100%; height: 50px;
+            display: flex; justify-content: flex-end; align-items: center;
+            padding: 0 20px; z-index: 2500; pointer-events: none;
         }
 
-        #presentation {
-            position: relative;
-            width: 100vw; height: 100vh; height: 100dvh;
-            display: flex; justify-content: center; align-items: center;
+        .top-toolbar button {
+            pointer-events: auto; background: var(--card-bg); border: 1px solid var(--border);
+            padding: 8px 12px; border-radius: 8px; margin-left: 8px; cursor: pointer;
+            font-size: 1.2rem; box-shadow: var(--shadow); color: var(--text-main);
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
         }
+        .top-toolbar button:hover { background: var(--primary-light); color: var(--primary); }
+
+        .progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; background: var(--border); z-index: 3000; }
+        .progress-bar { height: 100%; background: var(--primary); transition: width 0.3s ease; width: 0%; }
+
+        #presentation { position: relative; width: 100vw; height: 100vh; height: 100dvh; display: flex; justify-content: center; align-items: center; }
 
         .slide {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            padding: 3rem 5rem 6rem 5rem;
-            opacity: 0; visibility: hidden;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            padding: 3rem 5rem 6rem 5rem; opacity: 0; visibility: hidden;
             transition: opacity 0.3s ease-in-out, visibility 0.3s;
-            display: flex; flex-direction: column;
-            background-color: var(--bg-color);
+            display: flex; flex-direction: column; background-color: var(--bg-color);
             overflow-y: auto; -webkit-overflow-scrolling: touch;
         }
 
         .slide.active { opacity: 1; visibility: visible; }
 
-        h1 {
-            font-size: 2.2rem; color: var(--primary);
-            margin-bottom: 1.2rem; font-weight: 700; letter-spacing: -0.5px;
-        }
-
-        h2 {
-            font-size: 1.4rem; color: var(--secondary);
-            margin-bottom: 1.5rem; font-weight: 600;
-            display: flex; align-items: center; gap: 10px;
-        }
-
-        h3 {
-            font-size: 1.1rem; color: var(--text-main);
-            margin-bottom: 0.8rem; font-weight: 600;
-        }
-
-        p, li {
-            font-size: 1rem; line-height: 1.5;
-            margin-bottom: 0.6rem; color: var(--text-muted);
-        }
-
+        h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
+        h2 { font-size: 1.4rem; color: var(--secondary); margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.8rem; font-weight: 600; }
+        p, li { font-size: 1rem; line-height: 1.5; margin-bottom: 0.6rem; color: var(--text-muted); }
         strong { color: var(--text-main); font-weight: 600; }
 
-        .grid-2 {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 1.5rem; flex: 1; margin-top: 1rem;
-        }
-
-        .grid-3 {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem; margin-top: 1rem;
-        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; flex: 1; margin-top: 1rem; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 1rem; }
 
         .card {
-            background: var(--card-bg);
-            border-radius: 12px; padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            border-top: 4px solid var(--primary);
-            display: flex; flex-direction: column;
+            background: var(--card-bg); border-radius: 12px; padding: 1.5rem;
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+            border-top: 4px solid var(--primary); display: flex; flex-direction: column;
         }
 
         .card.secondary { border-top-color: var(--secondary); }
@@ -128,184 +105,401 @@
         .card.warning { border-top-color: var(--warning); }
         .card.purple { border-top-color: var(--purple); }
 
-        .case-container {
-            display: grid; grid-template-columns: 1fr 1fr;
-            gap: 2rem; margin-top: 1rem; flex: 1;
-        }
+        .case-container { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1rem; flex: 1; }
 
         .case-vignette {
-            background: #ffffff;
-            border: 1px solid var(--border);
-            border-left: 5px solid var(--secondary);
-            border-radius: 12px; padding: 1.5rem;
-            box-shadow: var(--shadow);
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-left: 5px solid var(--secondary); border-radius: 12px; padding: 1.5rem; box-shadow: var(--shadow);
         }
 
         .case-solution {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            border-left: 5px solid var(--primary);
-            border-radius: 12px; padding: 1.5rem;
-            box-shadow: var(--shadow);
+            background: var(--secondary-light); border: 1px solid var(--secondary);
+            border-left: 5px solid var(--primary); border-radius: 12px; padding: 1.5rem;
+            box-shadow: var(--shadow); display: none; 
         }
 
         .case-solution h3 { color: var(--primary); }
+        .case-solution.visible { display: block; animation: fadeIn 0.5s ease; }
+
+        .btn-reveal {
+            display: block; width: 100%; padding: 12px; margin-top: 1rem;
+            background: var(--primary); color: white; border: none; border-radius: 8px;
+            font-weight: 600; cursor: pointer; font-size: 1rem; transition: background 0.2s;
+        }
+        .btn-reveal:hover { background: #0284c7; }
+
+        /* Botón de Deep Dive */
+        .btn-deepdive {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary);
+            padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+            cursor: pointer; margin-top: 10px; transition: all 0.2s;
+        }
+        .btn-deepdive:hover { background: var(--primary); color: white; }
+
+        /* Botón Volver */
+        .btn-back {
+            display: none; 
+            position: fixed; bottom: calc(25px + env(safe-area-inset-bottom)); left: 50%;
+            transform: translateX(-50%); z-index: 3000;
+            background: var(--warning); color: white; border: none;
+            padding: 12px 24px; border-radius: 30px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+            align-items: center; gap: 8px; animation: bounceIn 0.3s;
+        }
+        .btn-back:hover { background: #d97706; }
 
         .list-icon { list-style: none; margin-top: 0.5rem; }
         .list-icon li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; }
-        .list-icon li::before {
-            content: "•"; color: var(--primary);
-            font-weight: bold; font-size: 1.5rem;
-            line-height: 1; position: absolute; left: 0; top: -2px;
-        }
+        .list-icon li::before { content: "•"; color: var(--primary); font-weight: bold; font-size: 1.5rem; line-height: 1; position: absolute; left: 0; top: -2px; }
 
-        .badge {
-            display: inline-block; padding: 0.3rem 0.8rem;
-            border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
-            background-color: var(--primary-light); color: var(--primary);
-            margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-
+        .badge { display: inline-block; padding: 0.3rem 0.8rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background-color: var(--primary-light); color: var(--primary); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .badge.blue { background-color: var(--primary-light); color: var(--primary); }
         .badge.red { background-color: var(--accent-light); color: var(--accent); }
         .badge.yellow { background-color: var(--warning-light); color: var(--warning); }
         .badge.purple { background-color: var(--purple-light); color: var(--purple); }
 
-        table {
-            width: 100%; border-collapse: collapse; margin-top: 1rem;
-            background: var(--card-bg); border-radius: 12px;
-            overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);
-        }
-
-        th, td {
-            padding: 1rem; text-align: left;
-            border-bottom: 1px solid var(--border); font-size: 0.95rem;
-        }
-
-        th {
-            background-color: var(--bg-color); color: var(--text-main);
-            font-weight: 600; border-bottom: 2px solid var(--border);
-        }
-
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; background: var(--card-bg); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+        th { background-color: var(--bg-color); color: var(--text-main); font-weight: 600; border-bottom: 2px solid var(--border); }
         tr:last-child td { border-bottom: none; }
 
-        /* ESTILOS DE LOS BLOQUES DESPLEGABLES (DETAILS) */
-        details {
-            margin-top: auto; /* Empuja hacia abajo */
-            padding-top: 1rem;
-        }
-        
-        summary {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 0.6rem 1rem;
-            background: var(--bg-color);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            cursor: pointer;
-            list-style: none;
-            transition: all 0.2s;
-            user-select: none;
-        }
-
+        /* BLOQUES DESPLEGABLES */
+        details { margin-top: auto; padding-top: 1rem; }
+        summary { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1rem; background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; font-weight: 600; font-size: 0.85rem; color: var(--text-main); cursor: pointer; list-style: none; transition: all 0.2s; user-select: none; }
         summary::-webkit-details-marker { display: none; }
         summary:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
-        
-        summary::before {
-            content: "➕";
-            font-size: 0.8rem;
-        }
+        summary::before { content: "➕"; font-size: 0.8rem; }
+        details[open] summary::before { content: "➖"; }
+        details[open] summary { background: var(--primary-light); color: var(--primary); border-color: var(--primary); margin-bottom: 0.5rem; }
+        .details-content { background: var(--card-bg); border: 1px solid var(--border); padding: 1rem; border-radius: 8px; font-size: 0.9rem; line-height: 1.5; color: var(--text-muted); animation: fadeIn 0.3s ease; }
 
-        details[open] summary::before {
-            content: "➖";
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounceIn { 0% { transform: translateX(-50%) scale(0.8); opacity: 0; } 100% { transform: translateX(-50%) scale(1); opacity: 1; } }
 
-        details[open] summary {
-            background: var(--primary-light);
-            color: var(--primary);
-            border-color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .details-content {
-            background: #ffffff;
-            border: 1px solid var(--border);
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            color: var(--text-muted);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .controls {
-            position: fixed;
-            bottom: calc(20px + env(safe-area-inset-bottom));
-            right: calc(20px + env(safe-area-inset-right));
-            display: flex; gap: 10px; z-index: 1000;
-        }
-
-        .controls button {
-            background: var(--card-bg); border: 1px solid var(--border);
-            padding: 12px 16px; border-radius: 12px;
-            cursor: pointer; font-weight: 600; color: var(--text-main);
-            box-shadow: var(--shadow); transition: all 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            font-size: 0.9rem;
-        }
-
+        /* CONTROLES INFERIORES */
+        .controls { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); right: calc(20px + env(safe-area-inset-right)); display: flex; gap: 10px; z-index: 1000; }
+        .controls button { background: var(--card-bg); border: 1px solid var(--border); padding: 12px 16px; border-radius: 12px; cursor: pointer; font-weight: 600; color: var(--text-main); box-shadow: var(--shadow); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; }
         .controls button:hover { background: var(--bg-color); color: var(--primary); }
         .controls button:active { transform: scale(0.95); }
+        .slide-counter { position: fixed; bottom: calc(25px + env(safe-area-inset-bottom)); left: calc(25px + env(safe-area-inset-left)); font-size: 0.9rem; color: var(--text-muted); font-weight: 600; background: var(--card-bg); padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); z-index: 1000; }
 
-        .slide-counter {
+        /* MENÚ DE ÍNDICE */
+        .toc-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 4000; display: none; justify-content: center; align-items: center; }
+        .toc-content { background: var(--card-bg); padding: 2rem; border-radius: 16px; width: 90%; max-width: 600px; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow); }
+        .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1rem; }
+        .toc-grid button { padding: 10px; text-align: left; background: var(--bg-color); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; color: var(--text-main); font-weight: 600; transition: 0.2s; }
+        .toc-grid button:hover { background: var(--primary); color: white; }
+
+        /* QUIZ */
+        .quiz-option { display: block; width: 100%; padding: 12px; margin-bottom: 10px; background: var(--bg-color); border: 2px solid var(--border); border-radius: 8px; text-align: left; cursor: pointer; font-size: 1rem; color: var(--text-main); transition: 0.2s; }
+        .quiz-option:hover { border-color: var(--primary); }
+        .quiz-option.correct { background: var(--secondary-light); border-color: var(--secondary); color: var(--secondary); font-weight: bold; }
+        .quiz-option.incorrect { background: var(--accent-light); border-color: var(--accent); color: var(--accent); font-weight: bold; }
+        .quiz-feedback { display: none; margin-top: 1rem; padding: 1rem; border-radius: 8px; font-size: 0.95rem; }
+        .quiz-feedback.correct { display: block; background: var(--secondary-light); color: var(--secondary); border-left: 4px solid var(--secondary); }
+        .quiz-feedback.incorrect { display: block; background: var(--accent-light); color: var(--accent); border-left: 4px solid var(--accent); }
+
+        /* AVATAR DR. HOUSE */
+        #house-avatar-container {
             position: fixed;
-            bottom: calc(25px + env(safe-area-inset-bottom));
-            left: calc(25px + env(safe-area-inset-left));
-            font-size: 0.9rem; color: var(--text-muted); font-weight: 600;
-            background: var(--card-bg); padding: 8px 16px;
-            border-radius: 20px; border: 1px solid var(--border);
-            box-shadow: var(--shadow); z-index: 1000;
+            bottom: 80px; 
+            left: 20px;
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: grab;
+            touch-action: none; /* Importante para el drag en móviles */
+            opacity: 0; 
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
 
+        #house-avatar-container:active {
+            cursor: grabbing;
+        }
+
+        body.show-house #house-avatar-container {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .house-avatar {
+            width: 80px; /* Más grande y visible */
+            height: 120px;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0px 6px 10px rgba(0,0,0,0.3));
+            pointer-events: none; /* Los clics pasan al contenedor */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .house-speech {
+            background: var(--card-bg);
+            border: 2px solid var(--primary);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            max-width: 200px;
+            text-align: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            margin-bottom: 8px;
+            box-shadow: var(--shadow);
+            pointer-events: none;
+        }
+
+        .house-speech::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: var(--primary) transparent transparent transparent;
+        }
+
+        .house-speech.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ESTILOS NUEVOS PARA EL GENERADOR DE PROMPTS */
+        .prompt-selector {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--bg-color);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+        .prompt-output {
+            width: 100%;
+            min-height: 150px;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-family: monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+            margin-bottom: 1rem;
+        }
+        .btn-copy {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            width: 100%;
+        }
+        .btn-copy:hover { background: #059669; }
+
         @media (max-width: 900px) {
-            .slide { padding: 1.5rem 1.5rem 7rem 1.5rem; }
+            .slide { padding: 2rem 1.5rem 7rem 1.5rem; }
             h1 { font-size: 1.6rem; }
             h2 { font-size: 1.2rem; }
             p, li { font-size: 0.95rem; }
             .grid-2, .grid-3, .case-container { grid-template-columns: 1fr; gap: 1.2rem; }
             .card, .case-vignette, .case-solution { padding: 1.2rem; }
             th, td { padding: 0.8rem; font-size: 0.85rem; }
-            .controls button { padding: 12px; font-size: 0.8rem; }
-        }
-
-        /* IMPRESIÓN A PDF */
-        @media print {
-            @page { size: landscape; margin: 0; }
-            body, html { overflow: visible !important; background-color: var(--bg-color) !important; height: auto !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            #presentation { display: block !important; height: auto !important; }
-            .slide { position: relative !important; display: flex !important; opacity: 1 !important; visibility: visible !important; page-break-after: always; height: 100vh; width: 100vw; padding: 2rem; box-sizing: border-box; }
-            .controls, .slide-counter, .progress-container { display: none !important; }
-            summary { display: none !important; } /* Ocultar botones al imprimir */
-            details { margin-top: 1rem; padding-top: 0; }
-            details > .details-content { display: block !important; border: none; padding: 0; }
-            details:not([open]) > .details-content { display: block !important; } /* Forzar apertura en PDF */
-            /* Truco para que details siempre esté abierto en PDF */
-            details { open: true; }
+            .toc-grid { grid-template-columns: 1fr; }
+            .house-avatar { width: 60px; height: 90px; }
+            .house-speech { max-width: 140px; font-size: 0.75rem; }
         }
     </style>
 </head>
-<body>
+<body class="show-house">
 
     <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
+
+    <!-- BARRA SUPERIOR -->
+    <div class="top-toolbar">
+        <button onclick="toggleHouse()" title="Activar/Desactivar Dr. House" id="house-btn">🩺</button>
+        <button onclick="toggleDarkMode()" title="Modo Oscuro" id="theme-btn">🌙</button>
+        <button onclick="toggleTOC()" title="Índice">📑</button>
+        <button onclick="readText()" title="Leer en voz alta">🔊</button>
+    </div>
+
+    <!-- AVATAR DR. HOUSE (REDISEÑADO Y ARRASTRABLE) -->
+    <div id="house-avatar-container">
+        <div class="house-speech" id="house-speech"></div>
+        <svg class="house-avatar" viewBox="0 0 32 48" shape-rendering="crispEdges">
+            <!-- Sombra base -->
+            <rect x="10" y="46" width="12" height="2" fill="rgba(0,0,0,0.2)"/>
+            
+            <!-- Cabello -->
+            <rect x="8" y="2" width="16" height="4" fill="#4a3624" />
+            <rect x="6" y="4" width="20" height="4" fill="#4a3624" />
+            <rect x="4" y="8" width="4" height="6" fill="#4a3624" />
+            <rect x="24" y="8" width="4" height="6" fill="#4a3624" />
+            <rect x="8" y="6" width="2" height="2" fill="#4a3624" />
+            <rect x="22" y="6" width="2" height="2" fill="#4a3624" />
+            
+            <!-- Cara -->
+            <rect x="8" y="6" width="16" height="12" fill="#f3c7a6" />
+            
+            <!-- Ojos (Azules) -->
+            <rect x="10" y="10" width="4" height="2" fill="#ffffff" />
+            <rect x="18" y="10" width="4" height="2" fill="#ffffff" />
+            <rect x="12" y="10" width="2" height="2" fill="#3b82f6" />
+            <rect x="18" y="10" width="2" height="2" fill="#3b82f6" />
+            
+            <!-- Cejas (Fruncidas) -->
+            <rect x="10" y="8" width="4" height="1" fill="#3b2b20" />
+            <rect x="18" y="8" width="4" height="1" fill="#3b2b20" />
+            <rect x="8" y="9" width="2" height="1" fill="#3b2b20" />
+            <rect x="22" y="9" width="2" height="1" fill="#3b2b20" />
+            
+            <!-- Nariz -->
+            <rect x="15" y="12" width="2" height="3" fill="#e2b190" />
+            
+            <!-- Barba / Stubble -->
+            <rect x="8" y="15" width="16" height="3" fill="#6b7280" />
+            <rect x="10" y="16" width="12" height="2" fill="#6b7280" />
+            <rect x="12" y="17" width="8" height="1" fill="#6b7280" />
+            
+            <!-- Cuello -->
+            <rect x="14" y="18" width="4" height="4" fill="#f3c7a6" />
+            
+            <!-- Camisa (Gris) y Corbatín -->
+            <rect x="10" y="20" width="12" height="12" fill="#cbd5e1" />
+            <rect x="14" y="20" width="4" height="12" fill="#f8fafc" />
+            <rect x="15" y="20" width="2" height="4" fill="#1e293b" />
+            
+            <!-- Bata Blanca -->
+            <rect x="6" y="20" width="4" height="16" fill="#ffffff" />
+            <rect x="22" y="20" width="4" height="16" fill="#ffffff" />
+            <rect x="6" y="20" width="20" height="4" fill="#ffffff" />
+            <rect x="8" y="22" width="2" height="6" fill="#e2e8f0" /> <!-- Bolsillo -->
+            
+            <!-- Brazo Derecho (Sosteniendo bastón) -->
+            <rect x="24" y="24" width="4" height="8" fill="#f3c7a6" />
+            <rect x="24" y="32" width="4" height="12" fill="#f3c7a6" />
+            <rect x="24" y="42" width="4" height="2" fill="#e2b190" />
+            
+            <!-- Brazo Izquierdo (Sosteniendo pastillas) -->
+            <rect x="4" y="24" width="4" height="8" fill="#f3c7a6" />
+            <rect x="4" y="32" width="4" height="6" fill="#f3c7a6" />
+            <rect x="2" y="38" width="6" height="4" fill="#f3c7a6" />
+            <!-- Frasco de Vicodin -->
+            <rect x="2" y="34" width="6" height="4" fill="#f59e0b" />
+            <rect x="2" y="32" width="6" height="2" fill="#ffffff" />
+            
+            <!-- Bastón -->
+            <rect x="26" y="20" width="2" height="28" fill="#78350f" />
+            <rect x="22" y="20" width="6" height="2" fill="#78350f" />
+            
+            <!-- Pantalones (Vaqueros) -->
+            <rect x="10" y="32" width="5" height="14" fill="#1e3a8a" />
+            <rect x="17" y="32" width="5" height="14" fill="#1e3a8a" />
+            <rect x="15" y="32" width="2" height="4" fill="#1e3a8a" /> <!-- Bragueta -->
+            
+            <!-- Zapatos -->
+            <rect x="8" y="46" width="8" height="2" fill="#111827" />
+            <rect x="16" y="46" width="8" height="2" fill="#111827" />
+        </svg>
+    </div>
+
+    <!-- MODAL DEL ÍNDICE -->
+    <div class="toc-modal" id="toc-modal">
+        <div class="toc-content">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin:0;">Índice</h2>
+                <button onclick="toggleTOC()" style="background:none; border:none; font-size: 1.5rem; cursor: pointer; color: var(--text-main);">✖</button>
+            </div>
+            <div class="toc-grid">
+                <button onclick="jumpToSlide(0)">1. Portada</button>
+                <button onclick="jumpToSlide(1)">2. Depresión: Fisiopatología</button>
+                <button onclick="jumpToSlide(2)">3. Depresión: Neuroimagen</button>
+                <button onclick="jumpToSlide(3)">4. Criterios DSM-5</button>
+                <button onclick="jumpToSlide(4)">5. Núcleo Sintomático</button>
+                <button onclick="jumpToSlide(5)">6. Fenomenología</button>
+                <button onclick="jumpToSlide(6)">7. Tipos de Depresión</button>
+                <button onclick="jumpToSlide(7)">8. Otros Tipos</button>
+                <button onclick="jumpToSlide(8)">9. Tratamiento GES</button>
+                <button onclick="jumpToSlide(9)">10. TEC</button>
+                <button onclick="jumpToSlide(10)">11. Caso 1: Dep. Mayor</button>
+                <button onclick="jumpToSlide(11)">12. Caso 2: Melancolía</button>
+                <button onclick="jumpToSlide(12)">13. Quiz Depresión</button>
+                <button onclick="jumpToSlide(13)">14. TEPT: Definición</button>
+                <button onclick="jumpToSlide(14)">15. TEPT: Neurobiología</button>
+                <button onclick="jumpToSlide(15)">16. TEPT: Criterios</button>
+                <button onclick="jumpToSlide(16)">17. TEPT Complejo</button>
+                <button onclick="jumpToSlide(17)">18. TEPT: Tratamiento</button>
+                <button onclick="jumpToSlide(18)">19. Caso 3: TEPT</button>
+                <button onclick="jumpToSlide(19)">20. Caso 4: TEPT C.</button>
+                <button onclick="jumpToSlide(20)">21. Quiz TEPT</button>
+                <button onclick="jumpToSlide(21)">22. Ansiedad: General</button>
+                <button onclick="jumpToSlide(22)">23. TAG</button>
+                <button onclick="jumpToSlide(23)">24. Pánico y Agorafobia</button>
+                <button onclick="jumpToSlide(24)">25. Fobias y TOC</button>
+                <button onclick="jumpToSlide(25)">26. Caso 5: Pánico</button>
+                <button onclick="jumpToSlide(26)">27. Caso 6: TOC</button>
+                <button onclick="jumpToSlide(27)">28. Quiz Ansiedad</button>
+                <button onclick="jumpToSlide(28)">29. Bipolar: Concepto</button>
+                <button onclick="jumpToSlide(29)">30. Manía vs Hipomanía</button>
+                <button onclick="jumpToSlide(30)">31. Mixtos y Akiskal</button>
+                <button onclick="jumpToSlide(31)">32. Caso 7: Bipolar I</button>
+                <button onclick="jumpToSlide(32)">33. Caso 8: Bipolar II</button>
+                <button onclick="jumpToSlide(33)">34. Quiz Bipolar</button>
+                <button onclick="jumpToSlide(34)">35. Psicosis: 4 A's</button>
+                <button onclick="jumpToSlide(35)">36. Delirios y Alucinaciones</button>
+                <button onclick="jumpToSlide(36)">37. Vías Dopaminérgicas</button>
+                <button onclick="jumpToSlide(37)">38. Diferencial Duración</button>
+                <button onclick="jumpToSlide(38)">39. Caso 9: Esquizofrenia</button>
+                <button onclick="jumpToSlide(39)">40. Caso 10: Orgánica</button>
+                <button onclick="jumpToSlide(40)">41. Caso 11: Paranoia</button>
+                <button onclick="jumpToSlide(41)">42. Quiz Psicosis</button>
+                <button onclick="jumpToSlide(42)">43. Manejo Psicosis</button>
+                <button onclick="jumpToSlide(43)">44. Primer Rango</button>
+                <button onclick="jumpToSlide(44)">45. Perlas Diagnósticas</button>
+                <button onclick="jumpToSlide(45)">46. Resumen Integrador</button>
+                <button onclick="jumpToSlide(46)">47. Curso Afectivo vs Psicótico</button>
+                <button onclick="jumpToSlide(47)">48. Caso 12: Mixto</button>
+                <button onclick="jumpToSlide(48)">49. Medicalización</button>
+                <button onclick="jumpToSlide(49)">50. ISRS</button>
+                <button onclick="jumpToSlide(50)">51. Litio</button>
+                <button onclick="jumpToSlide(51)">52. Alucinaciones Visuales</button>
+                <button onclick="jumpToSlide(52)">53. Catatonía</button>
+                <button onclick="jumpToSlide(53)">54. Riesgo Suicida</button>
+                <button onclick="jumpToSlide(54)">55. Esquizoafectivo</button>
+                <button onclick="jumpToSlide(55)">56. Fobia Específica</button>
+                <button onclick="jumpToSlide(56)">57. TOC vs TEPT</button>
+                <button onclick="jumpToSlide(57)">58. Conclusión</button>
+                <!-- Nuevos Deep Dives -->
+                <button onclick="jumpToSlide(58)" style="color: var(--warning);">🔍 Deep Dive: Síndrome Serotoninérgico</button>
+                <button onclick="jumpToSlide(59)" style="color: var(--warning);">🔍 Deep Dive: Síntomas Extrapiramidales</button>
+                <button onclick="jumpToSlide(60)" style="color: var(--warning);">🔍 Deep Dive: NMS vs Serotoninérgico</button>
+                <button onclick="jumpToSlide(61)" style="color: var(--warning);">🔍 Deep Dive: Cotard y Capgras</button>
+                <!-- Nueva Diapositiva Final -->
+                <button onclick="jumpToSlide(62)" style="color: var(--secondary); font-weight: 700;">✨ Generador de Prompts de Estudio</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÓN VOLVER -->
+    <button class="btn-back" id="btn-back" onclick="goBack()">
+        ← Volver a donde estaba
+    </button>
 
     <div id="presentation">
 
@@ -319,11 +513,11 @@
                 <h1 style="font-size: 2.8rem; margin-bottom: 1rem; border: none;">Psiquiatría Adultos</h1>
                 <h2 style="color: var(--text-muted); font-weight: 400; font-size: 1.3rem; margin-bottom: 2rem;">Guía Interactiva de Casos Clínicos</h2>
                 <div style="background: var(--card-bg); padding: 1.5rem 2rem; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); max-width: 90%;">
-                    <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">53 Diapositivas Interactivas</p>
+                    <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">63 Diapositivas + Deep Dives Ocultos</p>
                     <p style="font-size: 0.95rem;">Depresión • TEPT • Ansiedad • Bipolaridad • Psicosis</p>
                     <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--border);">
-                    <p style="font-size: 0.9rem; margin: 0;">📱 Desliza con el dedo o usa las flechas <kbd>←</kbd> <kbd>→</kbd></p>
-                    <p style="font-size: 0.9rem; margin: 0; margin-top: 0.5rem; color: var(--primary); font-weight: bold;">Clic en "➕ Ver explicación detallada" para más información.</p>
+                    <p style="font-size: 0.9rem; margin: 0;">📱 Desliza o usa las flechas <kbd>←</kbd> <kbd>→</kbd></p>
+                    <p style="font-size: 0.9rem; margin: 0; margin-top: 0.5rem; color: var(--primary); font-weight: bold;">Arrastra al Dr. House por la pantalla!</p>
                 </div>
             </div>
         </div>
@@ -339,21 +533,21 @@
                     <details>
                         <summary>Ver explicación detallada</summary>
                         <div class="details-content">
-                            <p><strong>¿Qué significa esto?</strong> La teoría clásica postula que la depresión ocurre por una falta de estos tres neurotransmisores en el espacio sináptico (el espacio entre neuronas).</p>
+                            <p><strong>¿Qué significa esto?</strong> La teoría clásica postula que la depresión ocurre por una falta de estos tres neurotransmisores en el espacio sináptico.</p>
                             <p><strong>5-HIAA:</strong> Es el metabólito de la serotonina. Encontrarlo bajo en el líquido cefalorraquídeo (LCR) es una prueba biológica directa de que el cerebro tiene poca serotonina disponible.</p>
-                            <p><strong>Up-regulation:</strong> Como hay pocos neurotransmisores, el cerebro intenta "compensar" creando MÁS receptores en la neurona postsináptica para atrapar cualquier molécula que pase. Los antidepresivos funcionan revirtiendo esto a largo plazo (down-regulation).</p>
+                            <p><strong>Up-regulation:</strong> Como hay pocos neurotransmisores, el cerebro intenta "compensar" creando MÁS receptores en la neurona postsináptica. Los antidepresivos funcionan revirtiendo esto (down-regulation).</p>
                         </div>
                     </details>
                 </div>
                 <div class="card secondary">
                     <h3>Eje HPA (Estrés)</h3>
                     <p>Hipercortisolemia crónica. El cortisol daña el hipocampo (atrofia) y reduce la neurogénesis.</p>
+                    <button class="btn-deepdive" onclick="goToDeepDive('deep-hpa')">📈 Profundizar: Gráfico Eje HPA</button>
                     <details>
                         <summary>Ver explicación detallada</summary>
                         <div class="details-content">
                             <p><strong>El Eje Hipotálamo-Hipófisis-Suprarrenal (HPA):</strong> Es el sistema de respuesta al estrés. En la depresión grave, este eje se queda "encendido" crónicamente, produciendo exceso de cortisol.</p>
                             <p><strong>Efecto neurotóxico:</strong> El cortisol elevado es tóxico para el hipocampo (área cerebral clave para la memoria y las emociones). Esto explica por qué los pacientes deprimidos tienen problemas de memoria, concentración y por qué el hipocampo se ve más pequeño (atrofia) en las resonancias.</p>
-                            <p><strong>Neurogénesis:</strong> El estrés crónico frena la creación de nuevas neuronas. Los antidepresivos y el ejercicio estimulan esta neurogénesis.</p>
                         </div>
                     </details>
                 </div>
@@ -505,7 +699,7 @@
                         <li>Pérdida de peso.</li>
                         <li>Ideas de ruina/Cotard.</li>
                         <li>Sin reactividad anímica.</li>
-                        <li><strong>Tratamiento:</strong> Terapia Electroconvulsiva (TEC), antidepresivos.</li>
+                        <li><strong>Tratamiento:</strong> TEC, antidepresivos.</li>
                     </ul>
                     <details>
                         <summary>Ver explicación clínica</summary>
@@ -541,12 +735,7 @@
                     <h3>Depresión Mixta (Koukopoulos)</h3>
                     <p>Depresión + ≥3 síntomas maníacos: irritabilidad, pensamiento acelerado, agitación.</p>
                     <p><strong>Alto riesgo suicida. Sugiere Bipolaridad.</strong></p>
-                    <details>
-                        <summary>Ver explicación clínica</summary>
-                        <div class="details-content">
-                            <p>El paciente está profundamente triste, pero su cerebro está "acelerado". Tiene ideas de muerte pero también mucha energía para llevarlas a cabo. <strong>Es el mayor factor de riesgo de suicidio.</strong> Si le das un antidepresivo solo, se empeora. Se debe tratar como un Trastorno Bipolar (con estabilizadores del ánimo como el Litio).</p>
-                        </div>
-                    </details>
+                    <button class="btn-deepdive" onclick="goToDeepDive('deep-koukopoulos')">📊 Profundizar: Criterios de Koukopoulos</button>
                 </div>
                 <div class="card purple">
                     <h3>Depresión Atípica</h3>
@@ -576,8 +765,7 @@
                 </div>
                 <div class="card secondary">
                     <h3>Moderada/Severa</h3>
-                    <p>ISRS + TCC.</p>
-                    <p>Seguimiento: 6 meses post-remisión.</p>
+                    <p>ISRS + TCC. Seguimiento: 6 meses post-remisión.</p>
                 </div>
                 <div class="card accent">
                     <h3>≥ 3 Episodios</h3>
@@ -629,6 +817,7 @@
             </details>
         </div>
 
+        <!-- CASO 1 -->
         <div class="slide">
             <h1>Caso Clínico 1: Depresión Mayor</h1>
             <div class="case-container">
@@ -638,21 +827,22 @@
                     <p>Mujer de 28 años. 3 meses: tristeza, angustia, labilidad, desgano, muerte pasiva, dificultad laboral, fatiga.</p>
                     <p><strong>Identificar:</strong> >2 semanas, ≥5 criterios.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Episodio Depresivo Mayor.</p>
-                    <p><strong>Conducta:</strong> Evaluar riesgo. ISRS + TCC.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso1')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso1" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Episodio Depresivo Mayor.</p>
+                        <p><strong>Conducta:</strong> Evaluar riesgo. ISRS + TCC.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>¿Por qué es depresión mayor y no duelo?</strong> Porque dura 3 meses (el duelo normal suele ser más corto), afecta su funcionalidad laboral y presenta ideación de muerte.</p>
+                            <p><strong>¿Por qué no es bipolaridad?</strong> No hay antecedentes de episodios de manía o hipomanía (ánimo elevado, falta de sueño, hiperactividad).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>¿Por qué es depresión mayor y no duelo?</strong> Porque dura 3 meses (el duelo normal suele ser más corto, aunque puede durar hasta 1 año), afecta su funcionalidad laboral y presenta ideación de muerte.</p>
-                    <p><strong>¿Por qué no es bipolaridad?</strong> No hay antecedentes de episodios de manía o hipomanía (ánimo elevado, falta de sueño, hiperactividad).</p>
-                </div>
-            </details>
         </div>
 
+        <!-- CASO 2 -->
         <div class="slide">
             <h1>Caso Clínico 2: Melancolía</h1>
             <div class="case-container">
@@ -662,19 +852,32 @@
                     <p>Mujer de 65 años. 8 meses: ánimo bajo, enlentecimiento, no come (baja 21 kg), no responde, ideas suicidas.</p>
                     <p><strong>Identificar:</strong> Inhibición severa, mutismo, desnutrición.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Melancolía con síntomas catatónicos.</p>
-                    <p><strong>Conducta:</strong> Hospitalización. <strong>TEC urgente.</strong></p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso2')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso2" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Melancolía con síntomas catatónicos.</p>
+                        <p><strong>Conducta:</strong> Hospitalización. <strong>TEC urgente.</strong></p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Signos de gravedad:</strong> La negativa a alimentarse y el mutismo indican catatonía. La paciente está en riesgo vital inminente.</p>
+                            <p><strong>¿Por qué no darle solo pastillas?</strong> El paciente catatónico no traga ni absorbe bien los fármacos, y no hay tiempo biológico para esperar 4 semanas. La TEC actúa en días salvando vidas.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Signos de gravedad:</strong> La negativa a alimentarse (llevando a 21 kg de pérdida) y el mutismo indican catatonía. La paciente está en riesgo vital inminente.</p>
-                    <p><strong>¿Por qué no darle solo pastillas?</strong> El paciente catatónico no traga, no absorbe bien los fármacos y no tiene el tiempo biológico para esperar 4 semanas a que el antidepresivo haga efecto. La TEC actúa en días y puede revertir el cuadro salvando su vida.</p>
-                </div>
-            </details>
+        </div>
+
+        <!-- QUIZ DEPRESIÓN -->
+        <div class="slide">
+            <h1>Pregunta de Repaso: Depresión</h1>
+            <div class="card" style="width: 100%; margin-top: 2rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem;">¿Cuál es el tratamiento de elección de primera línea para una depresión melancólica con síntomas catatónicos y alto riesgo suicida?</h3>
+                <button class="quiz-option" onclick="checkQuiz('dep', this, false)">A) ISRS (Inhibidores Selectivos de la Recaptación de Serotonina)</button>
+                <button class="quiz-option" onclick="checkQuiz('dep', this, true)">B) Terapia Electroconvulsiva (TEC) de urgencia</button>
+                <button class="quiz-option" onclick="checkQuiz('dep', this, false)">C) Psicoterapia Cognitivo-Conductual (TCC)</button>
+                <button class="quiz-option" onclick="checkQuiz('dep', this, false)">D) Litio en monoterapia</button>
+                <div class="quiz-feedback" id="feedback-dep"></div>
+            </div>
         </div>
 
         <!-- ==================== MÓDULO 2: TEPT ==================== -->
@@ -697,8 +900,8 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación detallada</summary>
                 <div class="details-content">
-                    <p><strong>¿Qué es un trauma?</strong> No es cualquier cosa mala que te pasa. Es un evento que amenaza la vida o la integridad física (propia o de otros) y que genera un miedo, horror o desesperanza intensos. Ej: asaltos, violaciones, accidentes graves, terremotos, guerras.</p>
-                    <p><strong>¿Por qué el trauma intencional es peor?</strong> Porque si un terremoto te quita la casa, es la naturaleza. Pero si un humano te hace daño deliberadamente (abuso, tortura, asalto), genera una traición a la confianza básica, lo que tiene un impacto psicológico mucho más profundo.</p>
+                    <p><strong>¿Qué es un trauma?</strong> No es cualquier cosa mala. Es un evento que amenaza la vida o integridad física y genera un miedo, horror o desesperanza intensos.</p>
+                    <p><strong>¿Por qué el trauma intencional es peor?</strong> Porque si un terremoto te quita la casa, es la naturaleza. Pero si un humano te hace daño deliberadamente (abuso, tortura, asalto), genera una traición a la confianza básica, con impacto psicológico mucho más profundo.</p>
                 </div>
             </details>
         </div>
@@ -795,7 +998,7 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
-                    <p><strong>¿Qué es el TEPT Complejo?</strong> Ocurre cuando el trauma fue crónico, repetitivo y ocurrió en etapas clave del desarrollo (ej. abuso sexual infantil prolongado). No solo afecta el miedo, afecta la formación de la personalidad entera.</p>
+                    <p><strong>¿Qué es el TEPT Complejo?</strong> Ocurre cuando el trauma fue crónico, repetitivo y ocurrió en etapas clave del desarrollo (ej. abuso sexual infantil prolongado).</p>
                     <p><strong>Diferencia con el Trastorno Límite de la Personalidad (TLP):</strong> En el TLP el paciente tiene una identidad inestable (hoy soy bueno, mañana malo) y relaciones caóticas (te amo, te odio). En el TEPT Complejo, el paciente tiene una identidad consistentemente negativa ("siempre fui un inútil") y evita las relaciones por miedo a ser dañado.</p>
                 </div>
             </details>
@@ -824,12 +1027,13 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación de terapias</summary>
                 <div class="details-content">
-                    <p><strong>EMDR (Desensibilización y Reprocesamiento por Movimientos Oculares):</strong> El paciente recuerda el trauma mientras sigue con los ojos los dedos del terapeuta. Esto estimula ambos hemisferios cerebrales y ayuda a "reprocesar" el recuerdo, despojándolo de la carga emocional.</p>
-                    <p><strong>Prazosina:</strong> Es un fármaco para la presión arterial que, por casualidad, bloquea la noradrenalina durante la noche, eliminando las pesadillas.</p>
+                    <p><strong>EMDR (Desensibilización y Reprocesamiento por Movimientos Oculares):</strong> El paciente recuerda el trauma mientras sigue con los ojos los dedos del terapeuta. Esto estimula ambos hemisferios cerebrales y ayuda a "reprocesar" el recuerdo.</p>
+                    <p><strong>Prazosina:</strong> Es un fármaco para la presión arterial que bloquea la noradrenalina durante la noche, eliminando las pesadillas.</p>
                 </div>
             </details>
         </div>
 
+        <!-- CASO 3 -->
         <div class="slide">
             <h1>Caso Clínico 3: TEPT</h1>
             <div class="case-container">
@@ -839,20 +1043,21 @@
                     <p>Hombre de 30 años. Asalto violento hace 2 meses. Pesadillas, flashbacks, evita transporte, insomnio.</p>
                     <p><strong>Identificar:</strong> >1 mes, 4 dimensiones.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> TEPT.</p>
-                    <p><strong>Conducta:</strong> Psicoterapia (TCC trauma). ISRS. Prazosina.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso3')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso3" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> TEPT.</p>
+                        <p><strong>Conducta:</strong> Psicoterapia (TCC trauma). ISRS. Prazosina.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>¿Por qué no es Trastorno de Estrés Agudo?</strong> El Trastorno de Estrés Agudo se diagnostica entre 3 días y 1 mes post-trauma. Este paciente lleva 2 meses, por lo que ya califica como TEPT.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>¿Por qué no es Trastorno de Estrés Agudo?</strong> El Trastorno de Estrés Agudo se diagnostica entre 3 días y 1 mes post-trauma. Este paciente lleva 2 meses, por lo que ya califica como TEPT (Trastorno de Estrés Postraumático).</p>
-                </div>
-            </details>
         </div>
 
+        <!-- CASO 4 -->
         <div class="slide">
             <h1>Caso Clínico 4: TEPT Complejo</h1>
             <div class="case-container">
@@ -862,18 +1067,31 @@
                     <p>Mujer de 22 años. Abuso infantil. Recuerdos intrusivos, "soy un fracaso", desregulación, evita relaciones.</p>
                     <p><strong>Identificar:</strong> Trauma crónico + TEPT + autoconcepto negativo.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> TEPT Complejo.</p>
-                    <p><strong>Conducta:</strong> Psicoterapia especializada largo plazo.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso4')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso4" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> TEPT Complejo.</p>
+                        <p><strong>Conducta:</strong> Psicoterapia especializada largo plazo.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Clave diagnóstica:</strong> El trauma no fue un evento único, sino crónico (abuso en la infancia). Además de los síntomas clásicos de TEPT, hay un daño en la forma en que se ve a sí misma ("soy un fracaso") y en cómo se relaciona (evita a todos).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Clave diagnóstica:</strong> El trauma no fue un evento único, sino crónico (abuso en la infancia). Además de los síntomas clásicos de TEPT, hay un daño en la forma en que se ve a sí misma ("soy un fracaso") y en cómo se relaciona (evita a todos).</p>
-                </div>
-            </details>
+        </div>
+
+        <!-- QUIZ TEPT -->
+        <div class="slide">
+            <h1>Pregunta de Repaso: TEPT</h1>
+            <div class="card" style="width: 100%; margin-top: 2rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem;">¿Cuál es la principal diferencia entre el TEPT Complejo y el Trastorno Límite de la Personalidad (TLP)?</h3>
+                <button class="quiz-option" onclick="checkQuiz('tept', this, false)">A) El TEPT Complejo tiene alucinaciones y el TLP no.</button>
+                <button class="quiz-option" onclick="checkQuiz('tept', this, true)">B) En el TEPT Complejo la autoimagen es negativa y estable, mientras que en el TLP es inestable y variable.</button>
+                <button class="quiz-option" onclick="checkQuiz('tept', this, false)">C) El TLP solo ocurre en mujeres y el TEPT Complejo en hombres.</button>
+                <button class="quiz-option" onclick="checkQuiz('tept', this, false)">D) No hay diferencia, son el mismo trastorno.</button>
+                <div class="quiz-feedback" id="feedback-tept"></div>
+            </div>
         </div>
 
         <!-- ==================== MÓDULO 3: ANSIEDAD ==================== -->
@@ -921,8 +1139,8 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
-                    <p><strong>Metapreocupación:</strong> Es el núcleo del TAG. El paciente se preocupa por estar preocupado. Piensa: "¿Y si me desmayo en el trabajo? ¿Y si me da un infarto? ¿Y si mi preocupación me vuelve loco?". Esto genera un círculo vicioso que no tiene fin.</p>
-                    <p><strong>Diferencia con el pánico:</strong> En el TAG la ansiedad es "flotante" y constante (estoy nervioso todo el día por todo). En el pánico, son ataques bruscos y súbitos.</p>
+                    <p><strong>Metapreocupación:</strong> Es el núcleo del TAG. El paciente se preocupa por estar preocupado. Piensa: "¿Y si me desmayo en el trabajo? ¿Y si me da un infarto?". Esto genera un círculo vicioso que no tiene fin.</p>
+                    <p><strong>Diferencia con el pánico:</strong> En el TAG la ansiedad es "flotante" y constante. En el pánico, son ataques bruscos y súbitos.</p>
                 </div>
             </details>
         </div>
@@ -942,8 +1160,8 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
-                    <p><strong>La crisis de pánico:</strong> El cuerpo se prepara para morir o volverse loco. El corazón se acelera, falta el aire, hay mareo. Es una falsa alarma de ahogamiento o infarto.</p>
-                    <p><strong>El círculo del pánico:</strong> El paciente siente una palpitación normal (por café o esfuerzo) y piensa "¡Me va a dar un infarto!". Ese pensamiento catastrófico genera más adrenalina, lo que genera más palpitaciones, lo que confirma el pensamiento. Es un bucle.</p>
+                    <p><strong>La crisis de pánico:</strong> El cuerpo se prepara para morir o volverse loco. El corazón se acelera, falta el aire. Es una falsa alarma de ahogamiento o infarto.</p>
+                    <p><strong>El círculo del pánico:</strong> El paciente siente una palpitación normal y piensa "¡Me va a dar un infarto!". Ese pensamiento catastrófico genera más adrenalina, lo que genera más palpitaciones, lo que confirma el pensamiento.</p>
                     <p><strong>Agorafobia:</strong> No es miedo a los espacios abiertos, es miedo a no poder escapar o no tener ayuda si te da un ataque.</p>
                 </div>
             </details>
@@ -966,11 +1184,12 @@
                 <div class="details-content">
                     <p><strong>Fobia Social:</strong> No es solo timidez. Es un terror paralizante a ser humillado o juzgado. El paciente suda, tiembla y se sonroja, y sabe que es irracional, pero no puede evitarlo.</p>
                     <p><strong>TOC:</strong> El paciente tiene pensamientos horribles (obsesiones) que le causan ansiedad, y hace rituales (compulsiones) para neutralizarlos. Ej: piensa que va a matar a su madre, entonces reza 10 veces para evitar que ocurra.</p>
-                    <p><strong>EPR (Exposición con Prevención de Respuesta):</strong> Es la terapia del TOC. Se expone al paciente a lo que le da miedo (ej. tocar un picaporte) pero se le PROHÍBE hacer el ritual (ej. lavarse las manos). Así el cerebro aprende que no pasa nada malo.</p>
+                    <p><strong>EPR (Exposición con Prevención de Respuesta):</strong> Es la terapia del TOC. Se expone al paciente a lo que le da miedo pero se le PROHÍBE hacer el ritual. Así el cerebro aprende que no pasa nada malo.</p>
                 </div>
             </details>
         </div>
 
+        <!-- CASO 5 -->
         <div class="slide">
             <h1>Caso Clínico 5: Pánico</h1>
             <div class="case-container">
@@ -979,21 +1198,22 @@
                     <h3>Paciente</h3>
                     <p>Hombre de 35 años. Crisis súbitas (palpitaciones, disnea, miedo a morir). Miedo a repetir. Dejó supermercado y metro.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Pánico con Agorafobia.</p>
-                    <p><strong>Conducta:</strong> Psicoeducación. ISRS + TCC.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso5')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso5" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Pánico con Agorafobia.</p>
+                        <p><strong>Conducta:</strong> Psicoeducación. ISRS + TCC.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Diagnóstico doble:</strong> Se le diagnostica Trastorno de Pánico (por las crisis) y Agorafobia (porque dejó de ir al supermercado y metro para evitar tener una crisis ahí).</p>
+                            <p><strong>Importante:</strong> Antes de diagnosticar pánico, hay que descartar causas médicas (hipertiroidismo, arritmias, feocromocitoma).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Diagnóstico doble:</strong> Se le diagnostica Trastorno de Pánico (por las crisis) y Agorafobia (porque dejó de ir al supermercado y metro para evitar tener una crisis ahí).</p>
-                    <p><strong>Importante:</strong> Antes de diagnosticar pánico, hay que descartar causas médicas (hipertiroidismo, arritmias, feocromocitoma).</p>
-                </div>
-            </details>
         </div>
 
+        <!-- CASO 6 -->
         <div class="slide">
             <h1>Caso Clínico 6: TOC</h1>
             <div class="case-container">
@@ -1002,19 +1222,32 @@
                     <h3>Paciente</h3>
                     <p>Mujer de 20 años. Gérmenes, lava manos >50 veces/día, usa guantes.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> TOC.</p>
-                    <p><strong>Conducta:</strong> ISRS dosis altas + TCC (EPR).</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso6')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso6" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> TOC.</p>
+                        <p><strong>Conducta:</strong> ISRS dosis altas + TCC (EPR).</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>El insight:</strong> La paciente sabe que los gérmenes no son tan peligrosos y que lavarse 50 veces es excesivo, pero no puede detenerse. Eso es la característica clave del TOC (egodistónico).</p>
+                            <p><strong>Dosis de ISRS:</strong> En el TOC, los ISRS requieren dosis más altas y más tiempo (10-12 semanas) que en la depresión para hacer efecto.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>El insight:</strong> La paciente sabe que los gérmenes no son tan peligrosos y que lavarse 50 veces es excesivo, pero no puede detenerse. Eso es la característica clave del TOC (egodistónico).</p>
-                    <p><strong>Dosis de ISRS:</strong> En el TOC, los ISRS requieren dosis más altas y más tiempo (10-12 semanas) que en la depresión para hacer efecto.</p>
-                </div>
-            </details>
+        </div>
+
+        <!-- QUIZ ANSIEDAD -->
+        <div class="slide">
+            <h1>Pregunta de Repaso: Ansiedad</h1>
+            <div class="card" style="width: 100%; margin-top: 2rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem;">¿Qué terapia psicológica es el "Gold Standard" para el Trastorno Obsesivo-Compulsivo (TOC)?</h3>
+                <button class="quiz-option" onclick="checkQuiz('ans', this, false)">A) Terapia de Exposición Narrativa (NET)</button>
+                <button class="quiz-option" onclick="checkQuiz('ans', this, true)">B) Exposición con Prevención de Respuesta (EPR)</button>
+                <button class="quiz-option" onclick="checkQuiz('ans', this, false)">C) Terapia Psicoanalítica</button>
+                <button class="quiz-option" onclick="checkQuiz('ans', this, false)">D) Terapia de Aceptación y Compromiso (ACT)</button>
+                <div class="quiz-feedback" id="feedback-ans"></div>
+            </div>
         </div>
 
         <!-- ==================== MÓDULO 4: BIPOLAR ==================== -->
@@ -1051,7 +1284,7 @@
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
                     <p><strong>Mania:</strong> El paciente no puede trabajar, se arruina económicamente (compra autos, regala cosas), es hospitalizado o tiene delirios. Dura más de 1 semana.</p>
-                    <p><strong>Hipomanía:</strong> El paciente está "demasiado contento", duerme poco, habla mucho, es productivo y sociable. No necesita hospitalización y no rompe su vida (aunque a veces se mete en problemas menores). Dura al menos 4 días. Para diagnosticar Bipolar II, debe tener además depresiones graves.</p>
+                    <p><strong>Hipomanía:</strong> El paciente está "demasiado contento", duerme poco, habla mucho, es productivo y sociable. No necesita hospitalización y no rompe su vida. Dura al menos 4 días. Para diagnosticar Bipolar II, debe tener además depresiones graves.</p>
                 </div>
             </details>
         </div>
@@ -1071,11 +1304,12 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
-                    <p><strong>Regla de Akiskal:</strong> Es una regla clínica para detectar pacientes bipolares que están mal diagnosticados como depresivos unipolares. Si un paciente tiene: más de 3 episodios depresivos, más de 3 fracasos matrimoniales, más de 3 profesiones distintas (porque se aburre rápido) o más de 3 fracasos con antidepresivos, hay que sospechar que en realidad es Bipolar.</p>
+                    <p><strong>Regla de Akiskal:</strong> Es una regla clínica para detectar pacientes bipolares que están mal diagnosticados como depresivos unipolares. Si un paciente tiene: más de 3 episodios depresivos, más de 3 fracasos matrimoniales, más de 3 profesiones distintas o más de 3 fracasos con antidepresivos, hay que sospechar que en realidad es Bipolar.</p>
                 </div>
             </details>
         </div>
 
+        <!-- CASO 7 -->
         <div class="slide">
             <h1>Caso Clínico 7: Bipolar I</h1>
             <div class="case-container">
@@ -1084,21 +1318,22 @@
                     <h3>Paciente</h3>
                     <p>Hombre de 25 años. 10 días durmiendo 2h, verborrea, proyectos grandiosos, gastos, dice ser Dios.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Bipolar I (manía con psicosis).</p>
-                    <p><strong>Conducta:</strong> Hospitalizar. Litio/Valproato + Atípico.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso7')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso7" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Bipolar I (manía con psicosis).</p>
+                        <p><strong>Conducta:</strong> Hospitalizar. Litio/Valproato + Atípico.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Síntomas de manía clásica:</strong> Disminución de la necesidad de dormir (no es insomnio, es que no tiene sueño), verborrea, grandiosidad y delirios.</p>
+                            <p><strong>¿Por qué hospitalizar?</strong> Porque tiene psicosis y está en riesgo (puede gastar toda su fortuna o lastimarse).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Síntomas de manía clásica:</strong> Disminución de la necesidad de dormir (no es insomnio, es que no tiene sueño), verborrea (habla sin parar), grandiosidad (proyectos irreales) y delirios (dice ser Dios).</p>
-                    <p><strong>¿Por qué hospitalizar?</strong> Porque tiene psicosis y está en riesgo (puede gastar toda su fortuna o lastimarse).</p>
-                </div>
-            </details>
         </div>
 
+        <!-- CASO 8 -->
         <div class="slide">
             <h1>Caso Clínico 8: Bipolar II</h1>
             <div class="case-container">
@@ -1107,19 +1342,32 @@
                     <h3>Paciente</h3>
                     <p>Mujer de 30 años. Depresión actual. "Rachas" de 4 días de energía. 3 fracasos antidepresivos.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Bipolar II.</p>
-                    <p><strong>Conducta:</strong> Suspender antidepresivos. Litio/Lamotrigina.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso8')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso8" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Bipolar II.</p>
+                        <p><strong>Conducta:</strong> Suspender antidepresivos. Litio/Lamotrigina.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>La trampa del Bipolar II:</strong> El paciente casi nunca consulta por la hipomanía (se siente bien, es productivo). Consulta por la depresión.</p>
+                            <p><strong>El problema:</strong> Si le das solo antidepresivos, el paciente no mejora (fracaso 1, 2 y 3) o puede "virar" y desencadenar una manía. Por eso se usan estabilizadores del ánimo o Lamotrigina (mejor para la fase depresiva).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>La trampa del Bipolar II:</strong> El paciente casi nunca consulta por la hipomanía (se siente bien, es productivo). Consulta por la depresión.</p>
-                    <p><strong>El problema:</strong> Si le das solo antidepresivos, el paciente no mejora (fracaso 1, 2 y 3) o puede "virar" y desencadenar una manía o episodio mixto. Por eso se usan estabilizadores del ánimo (Litio) o Lamotrigina (que es mejor para la fase depresiva).</p>
-                </div>
-            </details>
+        </div>
+
+        <!-- QUIZ BIPOLAR -->
+        <div class="slide">
+            <h1>Pregunta de Repaso: Bipolaridad</h1>
+            <div class="card" style="width: 100%; margin-top: 2rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem;">¿Cuál es el principal riesgo de usar antidepresivos en monoterapia en un paciente con Depresión Mixta (Criterios de Koukopoulos)?</h3>
+                <button class="quiz-option" onclick="checkQuiz('bip', this, false)">A) Que el paciente desarrolle síntomas extrapiramidales.</button>
+                <button class="quiz-option" onclick="checkQuiz('bip', this, true)">B) Que el paciente "vire" a manía, aumentando el riesgo suicida.</button>
+                <button class="quiz-option" onclick="checkQuiz('bip', this, false)">C) Que el paciente desarrolle hiperprolactinemia.</button>
+                <button class="quiz-option" onclick="checkQuiz('bip', this, false)">D) Ninguno, es el tratamiento de elección.</button>
+                <div class="quiz-feedback" id="feedback-bip"></div>
+            </div>
         </div>
 
         <!-- ==================== MÓDULO 5: PSICOSIS ==================== -->
@@ -1151,6 +1399,7 @@
                     <details><summary>Ver explicación</summary><div class="details-content"><strong>Auditivas:</strong> Escuchar voces que comentan lo que haces o discuten entre ellas. Es clásico de la esquizofrenia.<br><strong>Visuales:</strong> Ver cosas que no están. Casi siempre indican causa orgánica (tumor, demencia, drogas).</div></details>
                 </div>
             </div>
+            <button class="btn-deepdive" style="margin-top: 1rem;" onclick="goToDeepDive('deep-delirios')">🔍 Profundizar: Delirios de Cotard y Capgras</button>
         </div>
 
         <div class="slide">
@@ -1162,15 +1411,7 @@
                 <tr><td>Nigroestriatal</td><td>Control motor</td><td>Extrapiramidalismo</td></tr>
                 <tr><td>Tuberoinfundibular</td><td>Inhibe prolactina</td><td>Hiperprolactinemia</td></tr>
             </table>
-            <details style="margin-top: 1rem;">
-                <summary>Ver explicación clínica</summary>
-                <div class="details-content">
-                    <p><strong>Mesolímbica:</strong> Aquí se generan los delirios y las voces (síntomas positivos). Los antipsicóticos bloquean esta vía (efecto terapéutico).</p>
-                    <p><strong>Mesocortical:</strong> Aquí está la falta de dopamina. Esto genera apatía y aislamiento (síntomas negativos). Los antipsicóticos empeoran esto.</p>
-                    <p><strong>Nigroestriatal:</strong> Controla el movimiento. Bloquearla causa temblor y rigidez (efectos adversos extrapiramidales).</p>
-                    <p><strong>Tuberoinfundibular:</strong> Controla la prolactina. Bloquearla causa galactorrea (salida de leche) y amenorrea (falta de regla).</p>
-                </div>
-            </details>
+            <button class="btn-deepdive" onclick="goToDeepDive('deep-vias')">🧠 Profundizar: Gráfico de Vías Dopaminérgicas</button>
         </div>
 
         <div class="slide">
@@ -1195,11 +1436,12 @@
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
                     <p><strong>La regla del tiempo:</strong> La esquizofrenia requiere 6 meses de síntomas continuos. Si dura menos, es Esquizofreniforme (1-6 meses) o Psicótico Breve (menos de 1 mes, usualmente por estrés enorme).</p>
-                    <p><strong>Trastorno Delirante (Paranoia):</strong> El paciente tiene una vida completamente normal, trabaja, se relaciona, pero tiene un delirio fijo (ej. "mi vecino me quiere envenenar"). Inicio tardío (>40 años).</p>
+                    <p><strong>Trastorno Delirante (Paranoia):</strong> El paciente tiene una vida completamente normal, trabaja, se relaciona, pero tiene un delirio fijo. Inicio tardío (>40 años).</p>
                 </div>
             </details>
         </div>
 
+        <!-- CASO 9 -->
         <div class="slide">
             <h1>Caso Clínico 9: Esquizofrenia</h1>
             <div class="case-container">
@@ -1208,21 +1450,22 @@
                     <h3>Paciente</h3>
                     <p>Hombre de 20 años. 6 meses aislado, no se baña. "Ondas al cerebro". Afecto plano, sin insight.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Esquizofrenia.</p>
-                    <p><strong>Conducta:</strong> Antipsicótico atípico. Psicoeducación.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso9')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso9" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Esquizofrenia.</p>
+                        <p><strong>Conducta:</strong> Antipsicótico atípico. Psicoeducación.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Quiebre vital:</strong> El paciente era un joven normal y de repente se aisló, dejó de estudiar y se descuidó. Eso es la esencia de la esquizofrenia.</p>
+                            <p><strong>Sin insight:</strong> Él no cree que esté enfermo, cree que las ondas son reales. Por eso es tan difícil que acepte tratamiento.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Quiebre vital:</strong> El paciente era un joven normal y de repente se aisló, dejó de estudiar y se descuidó. Eso es la esencia de la esquizofrenia.</p>
-                    <p><strong>Sin insight:</strong> Él no cree que esté enfermo, cree que las ondas son reales. Por eso es tan difícil que acepte tratamiento (hay que usar psicoeducación y a veces medicación inyectable de depósito).</p>
-                </div>
-            </details>
         </div>
 
+        <!-- CASO 10 -->
         <div class="slide">
             <h1>Caso Clínico 10: Orgánica</h1>
             <div class="case-container">
@@ -1231,21 +1474,22 @@
                     <h3>Paciente</h3>
                     <p>Hombre de 45 años. 3 días confuso, ve insectos, agitado, fiebre, nuevo fármaco.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Delirium (orgánico).</p>
-                    <p><strong>Conducta:</strong> Hospitalizar, exámenes, tratar causa.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso10')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso10" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Delirium (orgánico).</p>
+                        <p><strong>Conducta:</strong> Hospitalizar, exámenes, tratar causa.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Pistas de organicidad:</strong> Edad mayor de 40 años, inicio agudo (3 días), fiebre, fármaco nuevo y alucinaciones visuales (ver insectos).</p>
+                            <p><strong>El delirium:</strong> Es una alteración de la conciencia. El paciente está desorientado y confuso. Hay que buscar la causa médica (infección, abstinencia, reacción adversa a medicamentos).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Pistas de organicidad:</strong> Edad mayor de 40 años, inicio agudo (3 días), fiebre, fármaco nuevo y alucinaciones visuales (ver insectos).</p>
-                    <p><strong>El delirium:</strong> Es una alteración de la conciencia. El paciente está desorientado y confuso. Hay que buscar la causa médica (infección, abstinencia, reacción adversa a medicamentos). No es esquizofrenia.</p>
-                </div>
-            </details>
         </div>
 
+        <!-- CASO 11 -->
         <div class="slide">
             <h1>Caso Clínico 11: Paranoia</h1>
             <div class="case-container">
@@ -1254,19 +1498,32 @@
                     <h3>Paciente</h3>
                     <p>Mujer de 50 años. 1 año creyendo que vecino envenena. Cámaras. Sin alucinaciones. Vida normal.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Trastorno Delirante (Paranoia).</p>
-                    <p><strong>Conducta:</strong> Alianza terapéutica. Antipsicótico dosis bajas.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso11')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso11" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Trastorno Delirante (Paranoia).</p>
+                        <p><strong>Conducta:</strong> Alianza terapéutica. Antipsicótico dosis bajas.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>Delirio encapsulado:</strong> La paciente solo está loca con el tema del vecino. En todo lo demás es una persona totalmente funcional y lógica. Esto es típico de la paranoia.</p>
+                            <p><strong>Dificultad:</strong> No aceptan tratamiento porque no creen que estén enfermas. Se usan antipsicóticos inyectables de larga duración disimulados.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>Delirio encapsulado:</strong> La paciente solo está loca con el tema del vecino. En todo lo demás (trabajo, familia, finanzas) es una persona totalmente funcional y lógica. Esto es típico de la paranoia.</p>
-                    <p><strong>Dificultad:</strong> No aceptan tratamiento porque no creen que estén enfermas. La hospitalización es muy difícil. Se usan antipsicóticos inyectables de larga duración disimulados.</p>
-                </div>
-            </details>
+        </div>
+
+        <!-- QUIZ PSICOSIS -->
+        <div class="slide">
+            <h1>Pregunta de Repaso: Psicosis</h1>
+            <div class="card" style="width: 100%; margin-top: 2rem;">
+                <h3 style="font-size: 1.3rem; margin-bottom: 1.5rem;">Un paciente de 65 años debuta con alucinaciones visuales (ve insectos), confusión y fiebre. ¿Cuál es la primera sospecha diagnóstica?</h3>
+                <button class="quiz-option" onclick="checkQuiz('psi', this, false)">A) Esquizofrenia de inicio tardío.</button>
+                <button class="quiz-option" onclick="checkQuiz('psi', this, true)">B) Causa orgánica (Delirium, infección, demencia).</button>
+                <button class="quiz-option" onclick="checkQuiz('psi', this, false)">C) Trastorno Bipolar tipo I.</button>
+                <button class="quiz-option" onclick="checkQuiz('psi', this, false)">D) Trastorno de Ansiedad Generalizada.</button>
+                <div class="quiz-feedback" id="feedback-psi"></div>
+            </div>
         </div>
 
         <!-- SLIDES COMPLEMENTARIAS -->
@@ -1302,7 +1559,7 @@
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
                     <p><strong>¿Qué son?</strong> Son un conjunto de síntomas que, según el psiquiatra Kurt Schneider, eran altamente específicos de la esquizofrenia (aunque hoy sabemos que también aparecen en otras psicosis).</p>
-                    <p><strong>Ejemplo:</strong> El paciente cree que le quitan sus pensamientos o que otros le meten ideas a la cabeza. O que sus pensamientos se escuchan en voz alta. Son alteraciones de los límites del Yo (yo soy yo, el mundo es el mundo).</p>
+                    <p><strong>Ejemplo:</strong> El paciente cree que le quitan sus pensamientos o que otros le meten ideas a la cabeza. O que sus pensamientos se escuchan en voz alta. Son alteraciones de los límites del Yo.</p>
                 </div>
             </details>
         </div>
@@ -1376,6 +1633,7 @@
             </details>
         </div>
 
+        <!-- CASO 12 -->
         <div class="slide">
             <h1>Caso Clínico 12: Mixto</h1>
             <div class="case-container">
@@ -1384,19 +1642,19 @@
                     <h3>Paciente</h3>
                     <p>Hombre de 40 años. Tristeza profunda, pero no puede quedarse quieto, habla rápido, irritable, insomnio de conciliación.</p>
                 </div>
-                <div class="case-solution">
-                    <h3>Resolución Clínica</h3>
-                    <p><strong>Diagnóstico:</strong> Depresión Mixta.</p>
-                    <p><strong>Conducta:</strong> Evaluar riesgo suicida. No usar antidepresivos solos. Iniciar estabilizador.</p>
+                <div>
+                    <button class="btn-reveal" onclick="toggleSolution('sol-caso12')">🔓 Revelar Diagnóstico y Resolución</button>
+                    <div class="case-solution" id="sol-caso12" style="margin-top: 1rem;">
+                        <h3>Resolución Clínica</h3>
+                        <p><strong>Diagnóstico:</strong> Depresión Mixta.</p>
+                        <p><strong>Conducta:</strong> Evaluar riesgo suicida. No usar antidepresivos solos. Iniciar estabilizador.</p>
+                        <div class="details-content" style="margin-top: 1rem;">
+                            <p><strong>El peligro:</strong> Tiene el deseo de morir de la depresión (ideación suicida) y la energía física y la impulsividad de la manía. Esto lo hace extremadamente propenso a intentar suicidarse con alta letalidad.</p>
+                            <p><strong>Conducta médica:</strong> La hospitalización suele ser necesaria. Se usan antipsicóticos atípicos y estabilizadores del ánimo (Litio, Valproato).</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver análisis del caso</summary>
-                <div class="details-content">
-                    <p><strong>El peligro:</strong> Tiene el deseo de morir de la depresión (ideación suicida) y la energía física y la impulsividad de la manía (no puede quedarse quieto). Esto lo hace extremadamente propenso a intentar suicidarse con alta letalidad.</p>
-                    <p><strong>Conducta médica:</strong> La hospitalización suele ser necesaria. Se usan antipsicóticos atípicos y estabilizadores del ánimo (Litio, Valproato).</p>
-                </div>
-            </details>
         </div>
 
         <div class="slide">
@@ -1429,13 +1687,7 @@
                     </ul>
                 </div>
             </div>
-            <details style="margin-top: 1rem;">
-                <summary>Ver explicación clínica</summary>
-                <div class="details-content">
-                    <p><strong>Síndrome serotoninérgico:</strong> Ocurre cuando hay demasiada serotonina (ej. combinando dos antidepresivos). Causa fiebre, temblor, sudoración, confusión, diarrea. Puede ser mortal. Es raro pero hay que saberlo.</p>
-                    <p><strong>Disfunción sexual:</strong> Es el efecto adverso que más hace abandonar el tratamiento. El paciente siente que pierde la libido o tiene dificultad para llegar al orgasmo. Se puede manejar bajando la dosis o cambiando a otro fármaco (como Bupropión).</p>
-                </div>
-            </details>
+            <button class="btn-deepdive" style="margin-top: 1rem;" onclick="goToDeepDive('deep-serotoninergico')">🚨 Profundizar: Síndrome Serotoninérgico</button>
         </div>
 
         <div class="slide">
@@ -1447,7 +1699,7 @@
                     <summary>Ver explicación clínica</summary>
                     <div class="details-content">
                         <p><strong>Margen estrecho:</strong> Significa que la diferencia entre la dosis terapéutica (que cura) y la dosis tóxica (que mata) es muy pequeña. Una deshidratación leve (gripe, diarrea) puede elevar el litio a niveles tóxicos.</p>
-                        <p><strong>Exámenes:</strong> Se debe medir la litemia (nivel en sangre) cada cierto tiempo. También medir el riñón (porque el litio se elimina por ahí) y el tiroides (porque el litio puede causar hipotiroidismo).</p>
+                        <p><strong>Exámenes:</strong> Se debe medir la litemia (nivel en sangre) cada cierto tiempo. También medir el riñón y el tiroides.</p>
                     </div>
                 </details>
             </div>
@@ -1492,8 +1744,8 @@
             <details style="margin-top: 1rem;">
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
-                    <p><strong>Flexibilidad céreo:</strong> El médico mueve el brazo del paciente a una posición incómoda (ej. levantado en el aire) y el paciente lo deja así por minutos u horas. Como si fuera de cera.</p>
-                    <p><strong>Es una urgencia médica:</strong> El paciente no come ni bebe, puede morir de deshidratación o trombosis (por estar inmóvil). Se debe tratar de inmediato con TEC o benzodiacepinas intravenosas.</p>
+                    <p><strong>Flexibilidad céreo:</strong> El médico mueve el brazo del paciente a una posición incómoda y el paciente lo deja así por minutos u horas. Como si fuera de cera.</p>
+                    <p><strong>Es una urgencia médica:</strong> El paciente no come ni bebe, puede morir de deshidratación o trombosis. Se debe tratar de inmediato con TEC o benzodiacepinas intravenosas.</p>
                 </div>
             </details>
         </div>
@@ -1511,7 +1763,7 @@
                     <summary>Ver explicación clínica</summary>
                     <div class="details-content">
                         <p><strong>No tener miedo de preguntar:</strong> Preguntar por el suicidio NO "planta la idea" en la cabeza del paciente. Al contrario, le da alivio al poder hablarlo.</p>
-                        <p><strong>Factores de riesgo claves:</strong> Haber tenido un intento previo (el factor más importante), tener un plan con un método letal (ej. arma de fuego), tener acceso al método, desesperanza extrema y estar soltero/aislado. Si el paciente dice "quiero morir, ya compré las pastillas y es hoy", se hospitaliza sin importar lo que diga.</p>
+                        <p><strong>Factores de riesgo claves:</strong> Haber tenido un intento previo, tener un plan con un método letal, desesperanza extrema y estar aislado. Si el paciente dice "quiero morir, ya compré las pastillas y es hoy", se hospitaliza sin importar lo que diga.</p>
                     </div>
                 </details>
             </div>
@@ -1548,7 +1800,6 @@
                 <summary>Ver explicación clínica</summary>
                 <div class="details-content">
                     <p><strong>Exposición gradual:</strong> Si le tienes fobia a las arañas, no te van a tirar una araña gigante en la primera sesión. Primero ves una foto, luego una araña pequeña en un frasco, luego la tocas. El cerebro aprende a desensibilizarse y a ver que no hay peligro real.</p>
-                    <p><strong>Fármacos:</strong> No sirven. No puedes tomar una pastilla todos los días para no tenerle miedo a volar en avión. La terapia es la solución.</p>
                 </div>
             </details>
         </div>
@@ -1575,15 +1826,289 @@
             <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
                 <h1 style="border: none; font-size: 2.5rem; color: var(--primary);">¡Mucho Éxito!</h1>
                 <p style="font-size: 1.1rem; color: var(--text-muted); margin-top: 1rem; max-width: 80%;">
-                    Has completado las 53 diapositivas de estudio. Recuerda que en psiquiatría el diagnóstico es clínico y la entrevista es tu mejor herramienta.
+                    Has completado las 58 diapositivas principales. No olvides revisar los Deep Dives (iconos de advertencia) para los conceptos más complejos.
                 </p>
+            </div>
+        </div>
+
+        <!-- ==================== DIAPOSITIVAS OCULTAS (DEEP DIVES) ==================== -->
+        
+        <!-- Deep Dive 1: Eje HPA -->
+        <div class="slide" id="deep-hpa">
+            <h1>Deep Dive: Eje Hipotálamo-Hipófisis-Suprarrenal (HPA)</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Fisiopatología Visual</h3>
+                    <p>El estrés crónico desregula este eje, provocando hipercortisolemia.</p>
+                    
+                    <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
+                        <svg viewBox="0 0 300 200" style="width: 100%; max-width: 300px; height: auto;">
+                            <rect x="100" y="10" width="100" height="30" fill="var(--primary-light)" stroke="var(--primary)" stroke-width="2" rx="4"/>
+                            <text x="150" y="30" font-size="12" text-anchor="middle" fill="var(--primary)" font-weight="bold">Hipotálamo</text>
+                            
+                            <line x1="150" y1="40" x2="150" y2="70" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="160" y="60" font-size="10" fill="var(--text-muted)">CRH</text>
+                            
+                            <rect x="110" y="70" width="80" height="30" fill="var(--secondary-light)" stroke="var(--secondary)" stroke-width="2" rx="4"/>
+                            <text x="150" y="90" font-size="12" text-anchor="middle" fill="var(--secondary)" font-weight="bold">Hipófisis</text>
+                            
+                            <line x1="150" y1="100" x2="150" y2="130" stroke="var(--text-muted)" stroke-width="2" marker-end="url(#arrow)"/>
+                            <text x="160" y="120" font-size="10" fill="var(--text-muted)">ACTH</text>
+                            
+                            <rect x="90" y="130" width="120" height="30" fill="var(--accent-light)" stroke="var(--accent)" stroke-width="2" rx="4"/>
+                            <text x="150" y="150" font-size="12" text-anchor="middle" fill="var(--accent)" font-weight="bold">Glándula Suprarrenal</text>
+                            
+                            <line x1="150" y1="160" x2="150" y2="180" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow-red)"/>
+                            <text x="160" y="175" font-size="12" fill="var(--accent)" font-weight="bold">Cortisol</text>
+                            
+                            <path d="M 210 145 Q 250 145 250 25 Q 250 10 210 10" fill="none" stroke="var(--warning)" stroke-width="2" stroke-dasharray="5,5" marker-end="url(#arrow-yellow)"/>
+                            <text x="260" y="80" font-size="10" fill="var(--warning)" transform="rotate(90 260 80)">Feedback Negativo (Falla en Depresión)</text>
+
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--text-muted)" />
+                                </marker>
+                                <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)" />
+                                </marker>
+                                <marker id="arrow-yellow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--warning)" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card secondary">
+                    <h3>Explicación Clínica</h3>
+                    <p><strong>1. ¿Qué es?</strong> Es la cascada hormonal que regula la respuesta al estrés. El Hipotálamo secreta CRH, la Hipófisis secreta ACTH, y las Suprarrenales liberan Cortisol.</p>
+                    <p><strong>2. El problema en la depresión:</strong> El eje HPA se queda "encendido" (hipercortisolemia). Los niveles de cortisol nunca bajan, lo que impide el feedback negativo.</p>
+                    <p><strong>3. Consecuencia neurotóxica:</strong> El exceso de cortisol es tóxico para el <strong>Hipocampo</strong> (área de la memoria). Esto explica por qué los pacientes deprimidos tienen problemas de memoria, concentración y por qué el hipocampo se ve atrofiado en las resonancias.</p>
+                    <p><strong>4. Dato de examen:</strong> Esta es la razón por la cual los pacientes con depresión mayor crónica pueden tener el eje HPA desregulado incluso cuando están "tristes" sin estrés externo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deep Dive 2: Vías Dopaminérgicas -->
+        <div class="slide" id="deep-vias">
+            <h1>Deep Dive: Vías Dopaminérgicas</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <h3>El Mapa de las Vías</h3>
+                    <p>Los antipsicóticos no son "específicos". Bloquean la dopamina en TODAS estas vías, generando efectos terapéuticos y adversos.</p>
+                    
+                    <div style="background: var(--bg-color); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <svg viewBox="0 0 300 250" style="width: 100%; max-width: 300px; height: auto;">
+                            <path d="M 50 150 Q 50 50 150 50 Q 250 50 250 150 Q 250 200 150 220 Q 50 200 50 150" fill="none" stroke="var(--border)" stroke-width="2"/>
+                            
+                            <path d="M 150 120 Q 150 80 180 90" fill="none" stroke="var(--secondary)" stroke-width="4" stroke-dasharray="5,5"/>
+                            <text x="185" y="85" font-size="10" fill="var(--secondary)" font-weight="bold">Mesolímbica</text>
+                            <text x="185" y="95" font-size="9" fill="var(--text-muted)">(+) Síntomas positivos</text>
+
+                            <path d="M 150 120 Q 120 80 100 80" fill="none" stroke="var(--primary)" stroke-width="4" stroke-dasharray="5,5"/>
+                            <text x="10" y="75" font-size="10" fill="var(--primary)" font-weight="bold">Mesocortical</text>
+                            <text x="10" y="85" font-size="9" fill="var(--text-muted)">(-) Síntomas negativos</text>
+
+                            <path d="M 150 120 Q 150 150 150 170" fill="none" stroke="var(--accent)" stroke-width="4" stroke-dasharray="5,5"/>
+                            <text x="160" y="165" font-size="10" fill="var(--accent)" font-weight="bold">Nigroestriatal</text>
+                            <text x="160" y="175" font-size="9" fill="var(--text-muted)">(Efectos Motores)</text>
+
+                            <path d="M 150 120 Q 120 150 120 180" fill="none" stroke="var(--warning)" stroke-width="4" stroke-dasharray="5,5"/>
+                            <text x="10" y="185" font-size="10" fill="var(--warning)" font-weight="bold">Tuberoinfundibular</text>
+                            <text x="10" y="195" font-size="9" fill="var(--text-muted)">(Prolactina)</text>
+                        </svg>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Explicación Clínica</h3>
+                    <p><strong>1. Vía Mesolímbica:</strong> Aquí hay Hiperactividad en la psicosis. Genera delirios y alucinaciones. <strong>Beneficio terapéutico:</strong> El bloqueo D2 aquí mejora los síntomas positivos.</p>
+                    <p><strong>2. Vía Mesocortical:</strong> Aquí hay Hipofunción. Genera síntomas negativos. <strong>Efecto adverso:</strong> El bloqueo D2 aquí empeora los síntomas negativos.</p>
+                    <p><strong>3. Vía Nigroestriatal:</strong> Controla el movimiento. <strong>Efecto adverso:</strong> El bloqueo D2 aquí produce síntomas extrapiramidales (temblor, rigidez).</p>
+                    <p><strong>4. Vía Tuberoinfundibular:</strong> Regula la prolactina. <strong>Efecto adverso:</strong> El bloqueo D2 aquí produce hiperprolactinemia (galactorrea, amenorrea).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deep Dive 3: Criterios de Koukopoulos -->
+        <div class="slide" id="deep-koukopoulos">
+            <h1>Deep Dive: Criterios de Koukopoulos</h1>
+            <div class="grid-2">
+                <div class="card warning">
+                    <h3>Los 7 Criterios</h3>
+                    <p>Para diagnosticar una Depresión Mixta (siempre en presencia de un Episodio Depresivo Mayor), se requiere la presencia de ≥ 3 de los siguientes síntomas:</p>
+                    <ol style="margin-left: 1.5rem; margin-top: 1rem; color: var(--text-muted); font-size: 1rem; line-height: 1.8;">
+                        <li><strong>Pensamientos tumultuosos o acelerados.</strong></li>
+                        <li><strong>Irritabilidad o sensación espontánea de ira.</strong></li>
+                        <li><strong>Ausencia de retardo psicomotor.</strong> (Se mueve rápido, no está inhibido).</li>
+                        <li><strong>Discurso abundante.</strong> (Habla mucho).</li>
+                        <li><strong>Descripción dramática del sufrimiento.</strong></li>
+                        <li><strong>Labilidad emocional</strong> y marcada reactividad afectiva.</li>
+                        <li><strong>Insomnio de conciliación.</strong> (No puede dormir porque su mente no para).</li>
+                    </ol>
+                    <div style="background: var(--accent-light); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid var(--accent);">
+                        <p style="color: var(--accent); font-weight: 600; margin: 0;">⚠️ Peligro Clínico: Alta tasa de suicidalidad. Los antidepresivos solos pueden empeorar el cuadro (viraje a manía).</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>¿Por qué es tan peligroso?</h3>
+                    <p><strong>La combinación letal:</strong> El paciente tiene el deseo de morir de la depresión (ideación suicida) y la energía física y la impulsividad de la manía (no puede quedarse quieto, pensamiento acelerado).</p>
+                    <p><strong>Consecuencia:</strong> Esto lo hace extremadamente propenso a intentar suicidarse con alta letalidad (no es una ideación pasiva, tienen la energía para llevarla a cabo).</p>
+                    <p><strong>Tratamiento correcto:</strong> Se debe tratar como un Trastorno Bipolar. Se usan estabilizadores del ánimo (Litio, Valproato) y antipsicóticos atípicos. <strong>Nunca antidepresivos en monoterapia.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deep Dive 4: Síndrome Serotoninérgico -->
+        <div class="slide" id="deep-serotoninergico">
+            <h1>Deep Dive: Síndrome Serotoninérgico</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <h3>¿Qué es y cómo se produce?</h3>
+                    <p>Es una toxicidad potencialmente mortal causada por un exceso de actividad serotoninérgica en el sistema nervioso central y periférico.</p>
+                    <p><strong>Causas más comunes:</strong></p>
+                    <ul class="list-icon">
+                        <li>Combinar dos fármacos que aumentan la serotonina (ej. ISRS + Tramadol, ISRS + Triptanes, ISRS + IMAO).</li>
+                        <li>Sobredosis de un solo fármaco serotoninérgico.</li>
+                        <li>Uso recreativo de drogas como el MDMA (éxtasis).</li>
+                    </ul>
+                    <p style="margin-top: 1rem; color: var(--accent); font-weight: bold;">⚠️ Es una emergencia médica. Puede llevar a la muerte si no se trata a tiempo.</p>
+                </div>
+                <div class="card">
+                    <h3>La Tríada Clínica (Regla de las 3 S)</h3>
+                    <ul class="list-icon">
+                        <li><strong>1. Estado Mental Alterado:</strong> Agitación, confusión, ansiedad severa, alucinaciones.</li>
+                        <li><strong>2. Síntomas Autonómicos:</strong> Fiebre alta (hipertermia), sudoración profusa, taquicardia, hipertensión, midriasis (pupilas dilatadas), diarrea.</li>
+                        <li><strong>3. Síntomas Neuromusculares:</strong> <strong>Clonus</strong> (espasmos musculares rítmicos, especialmente en los tobillos), hiperreflexia (reflejos exagerados), temblor, rigidez muscular.</li>
+                    </ul>
+                    <div style="background: var(--warning-light); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid var(--warning);">
+                        <p style="color: var(--warning); font-weight: 600; margin: 0;">Diferencia con el NMS: El Síndrome Neuroléptico Maligno (por antipsicóticos) cursa con rigidez "en tubo de plomo" y bradicinesia, pero <strong>NO</strong> tiene clonus ni hiperreflexia. El Serotoninérgico SÍ tiene clonus e hiperreflexia.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deep Dive 5: Síntomas Extrapiramidales -->
+        <div class="slide" id="deep-eps">
+            <h1>Deep Dive: Síntomas Extrapiramidales (EPS)</h1>
+            <div class="grid-2">
+                <div class="card warning">
+                    <h3>¿Qué son?</h3>
+                    <p>Son efectos adversos motores causados por el bloqueo de los receptores Dopamina D2 en la <strong>Vía Nigroestriatal</strong> por parte de los antipsicóticos (especialmente los típicos como Haloperidol).</p>
+                    <p>Se dividen en 4 categorías principales (pueden aparecer en diferentes momentos del tratamiento):</p>
+                </div>
+                <div class="card">
+                    <h3>Las 4 Manifestaciones</h3>
+                    <ul class="list-icon">
+                        <li><strong>1. Distonía Aguda:</strong> (Horas a días). Contracciones musculares involuntarias y dolorosas. Ej: tortícolis, crisis oculógiras (los ojos se van hacia arriba). <em>Tto: Biperideno IM.</em></li>
+                        <li><strong>2. Parkinsonismo:</strong> (Días a semanas). Temblor de reposo, rigidez, bradicinesia (lentitud), facies inexpresiva. <em>Tto: Bajar dosis o cambiar a atípico.</em></li>
+                        <li><strong>3. Acatisia:</strong> (Días a semanas). Inquietud motora extrema, imposibilidad de quedarse quieto. El paciente camina de un lado a otro. Es muy angustiante y se asocia a riesgo suicida. <em>Tto: Propanolol, benzodiacepinas.</em></li>
+                        <li><strong>4. Disquinesia Tardía:</strong> (Meses a años). Movimientos involuntarios de la lengua, labios, cara o extremidades. Es irreversible en muchos casos. <em>Tto: Prevención (no usar típicos por mucho tiempo).</em></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deep Dive 6: NMS vs Serotoninérgico -->
+        <div class="slide" id="deep-nms">
+            <h1>Deep Dive: NMS vs. Serotoninérgico</h1>
+            <div class="card" style="width: 100%;">
+                <h3>El Diferencial Vital en Urgencias</h3>
+                <p>Ambos son emergencias médicas potencialmente fatales inducidas por fármacos. Pero se confunden fácilmente.</p>
+                <table style="margin-top: 1rem;">
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>Síndrome Neuroléptico Maligno (NMS)</th>
+                        <th>Síndrome Serotoninérgico</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Fármaco causal</strong></td>
+                        <td>Antipsicóticos (Bloqueadores D2)</td>
+                        <td>ISRS, IMAO, Tramadol, MDMA</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Inicio</strong></td>
+                        <td>Lento (días a semanas)</td>
+                        <td>Rápido (horas a 24 hrs)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Estado Mental</strong></td>
+                        <td>Estupor, mutismo, coma</td>
+                        <td>Agitación, confusión, euforia</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Reflejos</strong></td>
+                        <td>Hiporreflexia (disminuidos)</td>
+                        <td>Hiperreflexia (exagerados)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Signo Clave</strong></td>
+                        <td>Rigidez "en tubo de plomo", <strong>NO</strong> clonus</td>
+                        <td><strong>Clonus</strong> (espasmos), temblor</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tratamiento</strong></td>
+                        <td>Bromocriptina, Dantroleno, TEC</td>
+                        <td>Ciproheptadina, Benzodiacepinas</td>
+                    </tr>
+                </table>
+                <p style="margin-top: 1rem; font-weight: bold; color: var(--primary);">Regla de Oro: Si hay Clonus e Hiperreflexia, es Serotoninérgico. Si hay Rigidez extrema y Reflejos disminuidos, es NMS.</p>
+            </div>
+        </div>
+
+        <!-- Deep Dive 7: Cotard y Capgras -->
+        <div class="slide" id="deep-delirios">
+            <h1>Deep Dive: Delirios de Cotard y Capgras</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <h3>Síndrome de Cotard</h3>
+                    <p><strong>¿Qué es?</strong> Es un delirio nihilista. El paciente cree firmemente que está muerto, que no existe, que se está pudriendo o que le faltan órganos internos (ej. "no tengo corazón", "mis intestinos están podridos").</p>
+                    <p><strong>¿Dónde aparece?</strong> Es clásico de la <strong>Depresión Melancólica</strong> grave con síntomas psicóticos. También puede verse en esquizofrenia.</p>
+                    <p><strong>Peligro:</strong> El paciente deja de comer o beber porque "los muertos no necesitan comer". Alto riesgo de desnutrición y muerte.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Síndrome de Capgras</h3>
+                    <p><strong>¿Qué es?</strong> Es un delirio de identificación errónea. El paciente cree que una persona cercana (esposa, madre, hijo) ha sido reemplazada por un impostor idéntico, un robot o un extraterrestre.</p>
+                    <p><strong>¿Dónde aparece?</strong> Es mucho más común en <strong>patologías orgánicas</strong> (demencia tipo Alzheimer, demencia por cuerpos de Lewy, lesiones cerebrales) que en psiquiatría pura.</p>
+                    <p><strong>Dato clínico:</strong> El paciente reconoce la cara de la persona, pero el circuito emocional (amígdala) no se activa. El cerebro interpreta esa falta de "familiaridad" como "¡es un impostor!".</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== NUEVA DIAPOSITIVA: GENERADOR DE PROMPTS ==================== -->
+        <div class="slide" id="prompt-generator">
+            <h1>✨ Generador de Prompts de Estudio</h1>
+            <div class="card" style="width: 100%;">
+                <p>Selecciona el tema que más te complica. La herramienta generará un <strong>prompt exacto</strong> que puedes copiar y pegar en ChatGPT, Claude o cualquier IA para que te lo explique a fondo, e incluso para que analice tus apuntes.</p>
+                
+                <label for="tema-select" style="font-weight: bold; margin-top: 1rem; display: block;">1. Selecciona tu tema complicado:</label>
+                <select id="tema-select" class="prompt-selector" onchange="generatePrompt()">
+                    <option value="default">-- Selecciona un tema --</option>
+                    <option value="depresion">Depresión (Criterios, tipos y TEC)</option>
+                    <option value="tept">TEPT y TEPT Complejo (vs TLP)</option>
+                    <option value="ansiedad">Trastornos de Ansiedad (TAG, Pánico, TOC)</option>
+                    <option value="bipolar">Bipolaridad (Mania, Hipomanía, Mixtos)</option>
+                    <option value="psicosis">Psicosis (Esquizofrenia, Vías Dopaminérgicas)</option>
+                    <option value="farmacos">Psicofármacos (ISRS, Litio, Antipsicóticos)</option>
+                    <option value="urg">Urgencias (Serotoninérgico, NMS, Catatonía)</option>
+                    <option value="delirios">Psicopatología (Delirios Cotard, Capgras, Schneider)</option>
+                </select>
+
+                <label for="prompt-output" style="font-weight: bold; margin-top: 1rem; display: block;">2. Tu Prompt Generado (Cópialo y pégalo en la IA):</label>
+                <textarea id="prompt-output" class="prompt-output" readonly placeholder="Selecciona un tema arriba para generar el prompt..."></textarea>
+
+                <button class="btn-copy" onclick="copyPrompt()">📋 Copiar Prompt al Portapapeles</button>
+                
+                <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+                    <h3>💡 ¿Cómo usar este Prompt?</h3>
+                    <p><strong>Para aprender desde cero:</strong> Pega el prompt en ChatGPT. La IA actuará como un profesor de psiquiatría y te explicará el tema paso a paso, con ejemplos clínicos.</p>
+                    <p><strong>Para subir tus apuntes:</strong> Si tienes el PDF o texto de la clase, puedes pegar el prompt <em>junto con tus apuntes</em> y decirle a la IA: "Actúa como mi tutor. Basándote en estos apuntes, explícame [tema] usando el siguiente prompt: ...".</p>
+                </div>
             </div>
         </div>
 
     </div>
 
     <!-- CONTROLES -->
-    <div class="slide-counter" id="counter">1 / 53</div>
+    <div class="slide-counter" id="counter">1 / 63</div>
     <div class="controls">
         <button onclick="toggleFullScreen()" id="fs-btn" title="Pantalla Completa">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1596,9 +2121,11 @@
 
     <script>
         let currentSlide = 0;
+        let previousSlideIndex = 0;
         const slides = document.querySelectorAll('.slide');
         const counter = document.getElementById('counter');
         const progress = document.getElementById('progress');
+        const btnBack = document.getElementById('btn-back');
 
         function showSlide(index) {
             slides.forEach((slide, i) => {
@@ -1608,15 +2135,38 @@
                     slide.scrollTop = 0;
                 }
             });
+            currentSlide = index;
             counter.textContent = `${index + 1} / ${slides.length}`;
             progress.style.width = (((index + 1) / slides.length) * 100) + '%';
         }
 
         function changeSlide(direction) {
-            currentSlide += direction;
-            if (currentSlide >= slides.length) currentSlide = 0;
-            if (currentSlide < 0) currentSlide = slides.length - 1;
-            showSlide(currentSlide);
+            let newIndex = currentSlide + direction;
+            if (newIndex >= slides.length) newIndex = 0;
+            if (newIndex < 0) newIndex = slides.length - 1;
+            showSlide(newIndex);
+        }
+
+        function jumpToSlide(index) {
+            showSlide(index);
+            toggleTOC();
+        }
+
+        // DEEP DIVES LOGIC
+        function goToDeepDive(deepDiveId) {
+            previousSlideIndex = currentSlide; // Guardar el índice actual
+            const targetIndex = Array.from(slides).findIndex(s => s.id === deepDiveId);
+            if (targetIndex !== -1) {
+                showSlide(targetIndex);
+                btnBack.style.display = 'flex'; // Mostrar botón volver
+            }
+        }
+
+        function goBack() {
+            if (previousSlideIndex !== undefined) {
+                showSlide(previousSlideIndex);
+                btnBack.style.display = 'none'; // Ocultar botón volver
+            }
         }
 
         // Teclado
@@ -1632,47 +2182,320 @@
         // Swipe táctil
         let touchStartX = 0;
         let touchStartY = 0;
-
         document.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
         }, {passive: true});
-
         document.addEventListener('touchend', (e) => {
             const touchEndX = e.changedTouches[0].screenX;
             const touchEndY = e.changedTouches[0].screenY;
             const diffX = touchStartX - touchEndX;
             const diffY = touchStartY - touchEndY;
-            
             if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
                 if (diffX > 0) changeSlide(1);
                 else changeSlide(-1);
             }
         }, {passive: true});
 
-        // Pantalla completa multiplataforma (iOS, Android, Chrome)
+        // Pantalla completa
         function toggleFullScreen() {
-            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
-                const elem = document.documentElement;
-                if (elem.requestFullscreen) {
-                    elem.requestFullscreen().catch(err => console.log(err));
-                } else if (elem.webkitRequestFullscreen) { /* Safari */
-                    elem.webkitRequestFullscreen();
-                } else if (elem.msRequestFullscreen) { /* IE11 */
-                    elem.msRequestFullscreen();
-                }
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.log(err));
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { /* Safari */
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) { /* IE11 */
-                    document.msExitFullscreen();
-                }
+                if (document.exitFullscreen) document.exitFullscreen();
             }
         }
 
-        // Inicializar contador dinámico
+        // MODO OSCURO
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            document.getElementById('theme-btn').textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Cargar preferencia de modo oscuro
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('theme-btn').textContent = '☀️';
+        }
+
+        // TOC MODAL
+        function toggleTOC() {
+            const toc = document.getElementById('toc-modal');
+            toc.style.display = toc.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // ACTIVE RECALL: Revelar Soluciones
+        function toggleSolution(id) {
+            const sol = document.getElementById(id);
+            if (sol.classList.contains('visible')) {
+                sol.classList.remove('visible');
+                sol.previousElementSibling.textContent = '🔓 Revelar Diagnóstico y Resolución';
+            } else {
+                sol.classList.add('visible');
+                sol.previousElementSibling.textContent = '🔒 Ocultar Resolución';
+            }
+        }
+
+        // TEXT TO SPEECH
+        function readText() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const activeSlide = document.querySelector('.slide.active');
+                const text = activeSlide.innerText.replace(/[➕➖🔓🔒📑🔊🌙☀️📥✖←→]/g, '');
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES';
+                utterance.rate = 0.95;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("Tu navegador no soporta la función de lectura en voz alta.");
+            }
+        }
+
+        // QUIZ LOGIC MEJORADO
+        function checkQuiz(module, btn, isCorrect) {
+            const parent = btn.parentElement;
+            const options = parent.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.disabled = true;
+                opt.style.cursor = 'default';
+            });
+
+            const feedback = document.getElementById(`feedback-${module}`);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.className = 'quiz-feedback correct';
+                feedback.innerHTML = '<strong>¡Correcto! 🎯</strong> Excelente razonamiento clínico. Has identificado la conducta correcta basada en la evidencia.';
+            } else {
+                btn.classList.add('incorrect');
+                feedback.className = 'quiz-feedback incorrect';
+                feedback.innerHTML = '<strong>Incorrecto. ❌</strong> Revisa los conceptos clave. Recuerda que en esta situación clínica, el tiempo es cerebro y la vida del paciente está en riesgo.';
+                
+                options.forEach(opt => {
+                    if (opt.getAttribute('onclick').includes('true')) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+        }
+
+        // DR. HOUSE AVATAR LOGIC
+        const houseQuotes = [
+            "Foreman usted es negro?",
+            "Foreblack",
+            "Denme un vicodin",
+            "Se murio el jeibi?",
+            "yo amo a mi señora",
+            "el pensé que es la madre del tonteque",
+            "Estas aprendiendo o simulando que pasas diapos?",
+            "Agua - cate",
+            "Mientras más pienso menos sé",
+            "Aquí entre nos, nos hace falta la srta mariel en la facu",
+            "Gracias por leer esto",
+            "Creditos a deepseek por todo esto",
+            "te sabes el chiste de pocoyo? estudia oe",
+            "Everybody lies...",
+            "It's not lupus",
+            "Pirocinto flabagast",
+            "Chiripiorca zinguifruta",
+            "¿Y si el paciente solo quiere atención?"
+        ];
+
+        let houseInterval;
+        const houseContainer = document.getElementById('house-avatar-container');
+        const houseSpeech = document.getElementById('house-speech');
+
+        function speakHouse() {
+            if (!document.body.classList.contains('show-house')) return;
+            
+            const randomQuote = houseQuotes[Math.floor(Math.random() * houseQuotes.length)];
+            houseSpeech.textContent = randomQuote;
+            houseSpeech.classList.add('show');
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                houseSpeech.classList.remove('show');
+            }, 5000);
+        }
+
+        function toggleHouse() {
+            document.body.classList.toggle('show-house');
+            const isShown = document.body.classList.contains('show-house');
+            document.getElementById('house-btn').style.background = isShown ? 'var(--primary-light)' : 'var(--card-bg)';
+            
+            if (isShown) {
+                speakHouse();
+                houseInterval = setInterval(speakHouse, 45000); // Cada 45 segs para no molestar
+            } else {
+                clearInterval(houseInterval);
+                houseSpeech.classList.remove('show');
+            }
+        }
+
+        // Lógica para Arrastrar a House (Draggable)
+        let isDragging = false;
+        let offsetX, offsetY;
+        let hasDragged = false;
+
+        houseContainer.addEventListener('pointerdown', (e) => {
+            // Solo arrastrar con clic izquierdo o toque
+            if (e.button !== 0 && e.pointerType === 'mouse') return;
+            
+            isDragging = true;
+            hasDragged = false;
+            
+            // Obtener la posición actual del contenedor
+            const rect = houseContainer.getBoundingClientRect();
+            
+            // Calcular el offset del puntero respecto a la esquina superior izquierda del contenedor
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+            
+            // Cambiar a posicionamiento absoluto respecto al viewport
+            houseContainer.style.transition = 'none';
+            houseContainer.style.left = rect.left + 'px';
+            houseContainer.style.top = rect.top + 'px';
+            houseContainer.style.bottom = 'auto';
+            houseContainer.style.right = 'auto';
+            
+            houseContainer.setPointerCapture(e.pointerId);
+        });
+
+        houseContainer.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            
+            hasDragged = true;
+            
+            // Calcular nueva posición
+            let newLeft = e.clientX - offsetX;
+            let newTop = e.clientY - offsetY;
+            
+            // Limitar al viewport
+            const maxLeft = window.innerWidth - houseContainer.offsetWidth;
+            const maxTop = window.innerHeight - houseContainer.offsetHeight;
+            
+            if (newLeft < 0) newLeft = 0;
+            if (newLeft > maxLeft) newLeft = maxLeft;
+            if (newTop < 0) newTop = 0;
+            if (newTop > maxTop) newTop = maxTop;
+            
+            houseContainer.style.left = newLeft + 'px';
+            houseContainer.style.top = newTop + 'px';
+        });
+
+        houseContainer.addEventListener('pointerup', (e) => {
+            if (isDragging) {
+                isDragging = false;
+                houseContainer.releasePointerCapture(e.pointerId);
+                
+                // Si no se movió, lo consideramos un clic para hablar
+                if (!hasDragged) {
+                    speakHouse();
+                }
+            }
+        });
+
+        // Inicializar Dr. House
+        houseInterval = setInterval(speakHouse, 45000);
+        document.getElementById('house-btn').style.background = 'var(--primary-light)';
+
+        // GENERADOR DE PROMPTS
+        const promptData = {
+            'depresion': `Actúa como un profesor de psiquiatría. Explícame en detalle la Depresión, enfocándote en:
+1. La diferencia clínica exacta entre Depresión Melancólica (Endógena) y Neurótica (Reactiva), con ejemplos de casos clínicos.
+2. Los criterios DSM-5 para el Episodio Depresivo Mayor y cómo se evalúa la gravedad.
+3. Las indicaciones absolutas de la Terapia Electroconvulsiva (TEC) y por qué es el tratamiento más efectivo para la catatonía.
+4. El concepto de "Depresión Mixta" de Koukopoulos y por qué el uso de antidepresivos solos aquí puede ser letal.
+Hazme un cuestionario de 5 preguntas al final para evaluar mi comprensión.`,
+            
+            'tept': `Actúa como un psiquiatra experto en trauma. Necesito entender a fondo el Trastorno de Estrés Postraumático (TEPT). Explícame:
+1. La neurobiología exacta del TEPT (el papel de la Amígdala hiperactiva, la Corteza Prefrontal hipofuncional y el Hipocampo atrofiado).
+2. La diferencia clínica y diagnóstica entre el TEPT Complejo (CIE-11) y el Trastorno Límite de la Personalidad (TLP). ¿Por qué se confunden?
+3. Las 4 dimensiones sintomáticas del DSM-5 (Reexperimentación, Evitación, Cognitivo-Afectivo, Hiperarousal) con ejemplos de cómo se ven en la consulta.
+4. Por qué la Psicoterapia (TCC, EMDR) es el Gold Standard y los fármacos solo son coadyuvantes.
+Dame un caso clínico complejo de TEPT Complejo para resolver.`,
+            
+            'ansiedad': `Actúa como un clínico experto. Ayúdame a dominar los Trastornos de Ansiedad. Explícame:
+1. El Trastorno de Ansiedad Generalizada (TAG): el concepto de "Metapreocupación" y cómo se diferencia del pánico.
+2. El Trastorno de Pánico y Agorafobia: qué es el "círculo del pánico" (la interpretación catastrófica de los síntomas somáticos).
+3. El Trastorno Obsesivo-Compulsivo (TOC): la diferencia entre obsesiones y compulsiones, y por qué la terapia EPR (Exposición con Prevención de Respuesta) es tan efectiva.
+4. Por qué los ISRS en el TOC requieren dosis más altas que en la depresión y tardan más en hacer efecto.
+Hazme un cuadro comparativo de los 3 trastornos basado en sus síntomas clave.`,
+            
+            'bipolar': `Actúa como un experto en trastornos del estado de ánimo. Necesito claridad total sobre el Trastorno Bipolar:
+1. La diferencia crítica entre Manía (Bipolar I) e Hipomanía (Bipolar II) en cuanto a duración, deterioro funcional y psicosis.
+2. La "Regla de los 3" de Akiskal para detectar bipolaridad oculta en pacientes con depresión resistente.
+3. La Depresión Mixta (Koukopoulos): por qué es tan peligrosa, cuáles son los 7 criterios y por qué los antidepresivos están contraindicados.
+4. El mecanismo de acción del Litio, sus efectos secundarios y cómo se monitorea la litemia (toxicidad).
+Dame un caso clínico donde un paciente parezca tener depresión pero en realidad sea Bipolar II.`,
+            
+            'psicosis': `Actúa como un psiquiatra especialista en psicosis. Explícame a fondo:
+1. Las 4 A de Bleuler (Asociación laxa, Afectividad embotada, Autismo, Ambivalencia).
+2. La diferencia de duración en el DSM-5: Trastorno Psicótico Breve (<1 mes), Esquizofreniforme (1-6 meses) y Esquizofrenia (>6 meses).
+3. La Teoría Dopaminérgica: las 4 vías (Mesolímbica, Mesocortical, Nigroestriatal, Tuberoinfundibular) y qué pasa cuando un fármaco bloquea los receptores D2 en cada una de ellas.
+4. Qué es el "Quiebre Vital" en la esquizofrenia y en qué se diferencia del curso episódico del Trastorno Bipolar.
+Hazme 3 preguntas de diagnóstico diferencial de psicosis.`,
+            
+            'farmacos': `Actúa como un psicofarmacólogo. Necesito dominar los psicofármacos:
+1. ISRS: Mecanismo de acción exacto, tiempo de latencia (por qué tardan 2-4 semanas en hacer efecto) y sus principales efectos adversos (disfunción sexual, síndrome serotoninérgico).
+2. Litio: Mecanismo (GSK-3β, IMPasa), margen terapéutico estrecho, signos de toxicidad y monitoreo (riñón, tiroides).
+3. Antipsicóticos Típicos vs. Atípicos: diferencias en el perfil de efectos adversos (Extrapiramidalismo vs. Síndrome Metabólico).
+4. El Síndrome Neuroléptico Maligno (NMS): cómo reconocerlo clínicamente (rigidez, fiebre, disautonomía) y cómo tratarlo.
+Dame un caso de interacción medicamentosa grave (ej. ISRS + Tramadol).`,
+            
+            'urg': `Actúa como un médico de urgencias psiquiátricas. Explícame cómo manejar las emergencias:
+1. El Síndrome Serotoninérgico vs. El Síndrome Neuroléptico Maligno: diferencias clave en clínica (Clonus/Hiperreflexia vs. Rigidez/Hiporreflexia) y tratamiento.
+2. La Catatonía: signos (flexibilidad céreo, negativismo, estupor), causas y por qué es una urgencia vital que requiere TEC o Benzodiacepinas.
+3. La Evaluación del Riesgo Suicida: cómo preguntar, qué factores de riesgo evaluar (plan, letalidad, intentos previos) y cuándo hospitalizar de inmediato.
+4. El Delirium: cómo diferenciarlo de una psicosis funcional (inicio agudo, alteración de la conciencia, alucinaciones visuales).
+Dame un escenario de urgencia y pídeme que actúe paso a paso.`,
+            
+            'delirios': `Actúa como un psicopatólogo experto. Necesito entender los delirios complejos:
+1. La diferencia entre Delirio Primario y Secundario (según la fenomenología).
+2. El Síndrome de Cotard (delirio nihilista): en qué patologías aparece, por qué el paciente deja de comer y cómo se trata.
+3. El Síndrome de Capgras (delirio de impostor): por qué es más frecuente en patologías orgánicas (demencia, lesiones cerebrales) que en esquizofrenia.
+4. Los Síntomas de Primer Rango de Schneider (percepción delirante, inserción/robo del pensamiento, fenómenos de pasividad, voces que comentan) y su valor diagnóstico actual.
+Dame un caso clínico donde un paciente presente un Síndrome de Capgras y explícame cómo abordarlo.`,
+            
+            'default': 'Por favor, selecciona un tema del menú desplegable para generar un prompt de estudio personalizado.'
+        };
+
+        function generatePrompt() {
+            const select = document.getElementById('tema-select');
+            const output = document.getElementById('prompt-output');
+            const selectedValue = select.value;
+            
+            output.value = promptData[selectedValue] || promptData['default'];
+        }
+
+        function copyPrompt() {
+            const output = document.getElementById('prompt-output');
+            if (!output.value || output.value === promptData['default']) {
+                alert("Primero selecciona un tema para generar el prompt.");
+                return;
+            }
+            
+            output.select();
+            output.setSelectionRange(0, 99999); // Para móviles
+            
+            navigator.clipboard.writeText(output.value).then(() => {
+                const btn = document.querySelector('.btn-copy');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ ¡Copiado con éxito!';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'var(--secondary)';
+                }, 2000);
+            }).catch(err => {
+                alert("Error al copiar el texto. Por favor, selecciónalo manualmente.");
+            });
+        }
+
+        // Inicializar
         document.addEventListener('DOMContentLoaded', () => {
             showSlide(0);
         });
