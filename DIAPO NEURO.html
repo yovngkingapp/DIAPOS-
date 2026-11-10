@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#f8fafc">
+    <title>Psiquiatría - Guía Interactiva de Casos Clínicos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta Minimalista Clara */
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            
+            --primary: #0ea5e9; /* Azul cielo */
+            --primary-light: #f0f9ff;
+            --secondary: #10b981; /* Verde menta */
+            --secondary-light: #ecfdf5;
+            --accent: #f43f5e; /* Rosa suave */
+            --accent-light: #fff1f2;
+            --warning: #f59e0b; /* Ámbar suave */
+            --warning-light: #fffbeb;
+            --purple: #8b5cf6;
+            --purple-light: #f5f3ff;
+            
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow: hidden;
+            -webkit-text-size-adjust: 100%;
+            touch-action: pan-y;
+        }
+
+        /* Barra de Progreso */
+        .progress-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--border);
+            z-index: 2000;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        #presentation {
+            position: relative;
+            width: 100vw; height: 100vh; height: 100dvh;
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 3rem 5rem 6rem 5rem;
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s;
+            display: flex; flex-direction: column;
+            background-color: var(--bg-color);
+            overflow-y: auto; -webkit-overflow-scrolling: touch;
+        }
+
+        .slide.active { opacity: 1; visibility: visible; }
+
+        h1 {
+            font-size: 2.2rem; color: var(--primary);
+            margin-bottom: 1.2rem; font-weight: 700; letter-spacing: -0.5px;
+        }
+
+        h2 {
+            font-size: 1.4rem; color: var(--secondary);
+            margin-bottom: 1.5rem; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        h3 {
+            font-size: 1.1rem; color: var(--text-main);
+            margin-bottom: 0.8rem; font-weight: 600;
+        }
+
+        p, li {
+            font-size: 1rem; line-height: 1.5;
+            margin-bottom: 0.6rem; color: var(--text-muted);
+        }
+
+        strong { color: var(--text-main); font-weight: 600; }
+
+        .grid-2 {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 1.5rem; flex: 1; margin-top: 1rem;
+        }
+
+        .grid-3 {
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem; margin-top: 1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px; padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--primary);
+        }
+
+        .card.secondary { border-top-color: var(--secondary); }
+        .card.accent { border-top-color: var(--accent); }
+        .card.warning { border-top-color: var(--warning); }
+        .card.purple { border-top-color: var(--purple); }
+
+        .case-container {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 2rem; margin-top: 1rem; flex: 1;
+        }
+
+        .case-vignette {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--secondary);
+            border-radius: 12px; padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .case-solution {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 5px solid var(--primary);
+            border-radius: 12px; padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .case-solution h3 { color: var(--primary); }
+
+        .list-icon { list-style: none; margin-top: 0.5rem; }
+        .list-icon li { position: relative; padding-left: 1.5rem; margin-bottom: 0.5rem; }
+        .list-icon li::before {
+            content: "•"; color: var(--primary);
+            font-weight: bold; font-size: 1.5rem;
+            line-height: 1; position: absolute; left: 0; top: -2px;
+        }
+
+        .badge {
+            display: inline-block; padding: 0.3rem 0.8rem;
+            border-radius: 9999px; font-size: 0.75rem; font-weight: 700;
+            background-color: var(--primary-light); color: var(--primary);
+            margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .badge.blue { background-color: var(--primary-light); color: var(--primary); }
+        .badge.red { background-color: var(--accent-light); color: var(--accent); }
+        .badge.yellow { background-color: var(--warning-light); color: var(--warning); }
+        .badge.purple { background-color: var(--purple-light); color: var(--purple); }
+
+        table {
+            width: 100%; border-collapse: collapse; margin-top: 1rem;
+            background: var(--card-bg); border-radius: 12px;
+            overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 1rem; text-align: left;
+            border-bottom: 1px solid var(--border); font-size: 0.95rem;
+        }
+
+        th {
+            background-color: var(--bg-color); color: var(--text-main);
+            font-weight: 600; border-bottom: 2px solid var(--border);
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        .controls {
+            position: fixed;
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            right: calc(20px + env(safe-area-inset-right));
+            display: flex; gap: 10px; z-index: 1000;
+        }
+
+        .controls button {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 12px 16px; border-radius: 12px;
+            cursor: pointer; font-weight: 600; color: var(--text-main);
+            box-shadow: var(--shadow); transition: all 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .controls button:hover { background: var(--bg-color); color: var(--primary); }
+        .controls button:active { transform: scale(0.95); }
+
+        .slide-counter {
+            position: fixed;
+            bottom: calc(25px + env(safe-area-inset-bottom));
+            left: calc(25px + env(safe-area-inset-left));
+            font-size: 0.9rem; color: var(--text-muted); font-weight: 600;
+            background: var(--card-bg); padding: 8px 16px;
+            border-radius: 20px; border: 1px solid var(--border);
+            box-shadow: var(--shadow); z-index: 1000;
+        }
+
+        @media (max-width: 900px) {
+            .slide { padding: 1.5rem 1.5rem 7rem 1.5rem; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.2rem; }
+            p, li { font-size: 0.95rem; }
+            .grid-2, .grid-3, .case-container { grid-template-columns: 1fr; gap: 1.2rem; }
+            .card, .case-vignette, .case-solution { padding: 1.2rem; }
+            th, td { padding: 0.8rem; font-size: 0.85rem; }
+            .controls button { padding: 12px; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="progress-container"><div class="progress-bar" id="progress"></div></div>
+
+    <div id="presentation">
+
+        <!-- SLIDE 1: Title -->
+        <div class="slide active">
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
+                <svg style="width: 80px; height: 80px; color: var(--primary); margin-bottom: 1.5rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"></path>
+                    <circle cx="12" cy="9" r="2.5"></circle>
+                </svg>
+                <h1 style="font-size: 2.8rem; margin-bottom: 1rem; border: none;">Psiquiatría Adultos</h1>
+                <h2 style="color: var(--text-muted); font-weight: 400; font-size: 1.3rem; margin-bottom: 2rem;">Guía Interactiva de Casos Clínicos</h2>
+                <div style="background: var(--card-bg); padding: 1.5rem 2rem; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid var(--border); max-width: 90%;">
+                    <p style="font-weight: 600; font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">57 Diapositivas Completas</p>
+                    <p style="font-size: 0.95rem;">Depresión • TEPT • Ansiedad • Bipolaridad • Psicosis</p>
+                    <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--border);">
+                    <p style="font-size: 0.9rem; margin: 0;">📱 Desliza con el dedo o usa las flechas <kbd>←</kbd> <kbd>→</kbd></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MÓDULO 1: DEPRESIÓN ==================== -->
+        <div class="slide">
+            <h1>Depresión: Fisiopatología</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Hipótesis Monoaminérgica</h3>
+                    <p>Déficit de <strong>Serotonina (5-HT)</strong>, <strong>Noradrenalina (NE)</strong> y <strong>Dopamina (DA)</strong>.</p>
+                    <p><em>Evidencia:</em> Disminución de 5-HIAA en LCR. Up-regulation de receptores postsinápticos.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Eje HPA (Estrés)</h3>
+                    <p>Hipercortisolemia crónica. El cortisol daña el hipocampo (atrofia) y reduce la neurogénesis.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Depresión: Neuroimagen</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <h3>Hipofunción DLPFC</h3>
+                    <p>Corteza Prefrontal Dorsolateral.</p>
+                    <p>Asociada a: déficit de concentración, anhedonia, culpa y suicidalidad.</p>
+                </div>
+                <div class="card warning">
+                    <h3>Hiperactivación de Amígdala</h3>
+                    <p>Procesamiento exagerado de emociones negativas.</p>
+                    <p>Asociada a: rumiación, miedo, tristeza persistente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Depresión: Criterios DSM-5</h1>
+            <div class="card" style="width: 100%;">
+                <p style="font-size: 1rem;"><strong>Duración mínima:</strong> ≥ 2 semanas. <strong>Síntomas:</strong> ≥ 5 (al menos 1 de los 2 primeros).</p>
+                <div class="grid-2" style="margin-top: 1rem;">
+                    <div>
+                        <h3>Síntomas Obligatorios (uno)</h3>
+                        <ul class="list-icon">
+                            <li>Ánimo deprimido.</li>
+                            <li>Anhedonia (pérdida de placer).</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Otros Síntomas</h3>
+                        <ul class="list-icon">
+                            <li>Cambios apetito/peso.</li>
+                            <li>Insomnio/hipersomnia.</li>
+                            <li>Agitación o enlentecimiento.</li>
+                            <li>Fatiga.</li>
+                            <li>Culpa/inutilidad.</li>
+                            <li>Déficit de concentración.</li>
+                            <li>Ideación de muerte.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Depresión: Núcleo Sintomático</h1>
+            <div class="grid-3">
+                <div class="card">
+                    <h3>1. Ánimo</h3>
+                    <p>Tristeza persistente, vacío, desesperanza.</p>
+                    <p><strong>Anhedonia:</strong> Pérdida de placer.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>2. Pensamiento</h3>
+                    <p><strong>Bradipsiquia:</strong> Enlentecimiento.</p>
+                    <p>Bloqueos, ideas de ruina.</p>
+                </div>
+                <div class="card accent">
+                    <h3>3. Volición</h3>
+                    <p>Inhibición psicomotora (lentitud) o agitación. <em>Los signos más objetivos son energía y psicomotricidad.</em></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Depresión: Fenomenología</h1>
+            <h2>Estratos Afectivos (Max Scheler)</h2>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Vitales</h3>
+                    <p>Vigor, fatiga, bienestar general. <strong>Afectados en depresión melancólica.</strong></p>
+                </div>
+                <div class="card secondary">
+                    <h3>Psíquicos</h3>
+                    <p>Amor, tristeza, miedo, esperanza. <strong>Afectados en depresión neurótica.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Tipos de Depresión</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <span class="badge red">Endógena</span>
+                    <h3>Melancólica</h3>
+                    <ul class="list-icon">
+                        <li>Inhibición severa (catatonía).</li>
+                        <li>Despertar precoz.</li>
+                        <li>Pérdida de peso.</li>
+                        <li>Ideas de ruina/Cotard.</li>
+                        <li>Sin reactividad anímica.</li>
+                        <li><strong>Tto:</strong> TEC, antidepresivos.</li>
+                    </ul>
+                </div>
+                <div class="card secondary">
+                    <span class="badge blue">Reactiva</span>
+                    <h3>Neurótica</h3>
+                    <ul class="list-icon">
+                        <li>Gatillante claro (duelo).</li>
+                        <li>Sin inhibición grave.</li>
+                        <li>Alta sensibilidad a estrés.</li>
+                        <li>Cronicidad.</li>
+                        <li><strong>Tto:</strong> Psicoterapia.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Depresión: Otros Tipos</h1>
+            <div class="grid-2">
+                <div class="card warning">
+                    <h3>Depresión Mixta (Koukopoulos)</h3>
+                    <p>Depresión + ≥3 síntomas maníacos: irritabilidad, pensamiento acelerado, agitación.</p>
+                    <p><strong>Alto riesgo suicida. Sugiere Bipolaridad.</strong></p>
+                </div>
+                <div class="card purple">
+                    <h3>Depresión Atípica</h3>
+                    <ul class="list-icon">
+                        <li>Reactividad anímica.</li>
+                        <li>Hiperfagia.</li>
+                        <li>Hipersomnia.</li>
+                        <li>Parálisis plúmbea.</li>
+                        <li>Sensibilidad al rechazo.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Depresión: Tratamiento GES</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Leve</h3>
+                    <p>Psicoterapia como tratamiento de elección.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Moderada/Severa</h3>
+                    <p>ISRS + TCC.</p>
+                    <p>Seguimiento: 6 meses post-remisión.</p>
+                </div>
+                <div class="card accent">
+                    <h3>≥ 3 Episodios</h3>
+                    <p>Tratamiento profiláctico (de por vida).</p>
+                </div>
+                <div class="card warning">
+                    <h3>Melancolía / Catatonía</h3>
+                    <p><strong>TEC de elección.</strong> Respuesta en días.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Terapia Electroconvulsiva (TEC)</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Indicaciones</h3>
+                    <ul class="list-icon">
+                        <li>Depresión melancólica grave.</li>
+                        <li>Catatonía.</li>
+                        <li>Alto riesgo suicida.</li>
+                        <li>Episodio maníaco o psicótico agudo.</li>
+                    </ul>
+                </div>
+                <div class="card secondary">
+                    <h3>¿Cómo funciona?</h3>
+                    <ul class="list-icon">
+                        <li>En pabellón, con anestesia.</li>
+                        <li>Relajante muscular (no convulsión visible).</li>
+                        <li>Sin dolor, sin recuerdos.</li>
+                        <li>Respuesta en días vs semanas de fármacos.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 1: Depresión Mayor</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Mujer de 28 años. 3 meses: tristeza, angustia, labilidad, desgano, muerte pasiva, dificultad laboral, fatiga.</p>
+                    <p><strong>Identificar:</strong> >2 semanas, ≥5 criterios.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Episodio Depresivo Mayor.</p>
+                    <p><strong>Conducta:</strong> Evaluar riesgo. ISRS + TCC.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 2: Melancolía</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Mujer de 65 años. 8 meses: ánimo bajo, enlentecimiento, no come (baja 21 kg), no responde, ideas suicidas.</p>
+                    <p><strong>Identificar:</strong> Inhibición severa, mutismo, desnutrición.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Melancolía con síntomas catatónicos.</p>
+                    <p><strong>Conducta:</strong> Hospitalización. <strong>TEC urgente.</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MÓDULO 2: TEPT ==================== -->
+        <div class="slide">
+            <h1>TEPT: Definición y Epidemiología</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Definición</h3>
+                    <p>Exposición a eventos extremadamente graves (traumáticos). Víctima, testigo u oyente.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Epidemiología</h3>
+                    <ul class="list-icon">
+                        <li><strong>75%</strong> expuestas a ≥1 trauma.</li>
+                        <li><strong>23%</strong> trauma intencional.</li>
+                        <li>Prevalencia: 2.7% (H) y 5.1% (M).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>TEPT: Neurobiología del Miedo</h1>
+            <div class="grid-3">
+                <div class="card accent">
+                    <h3>Amígdala ↑</h3>
+                    <p>Detección exagerada de amenazas.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Corteza Prefrontal ↓</h3>
+                    <p>No extingue el miedo.</p>
+                </div>
+                <div class="card">
+                    <h3>Hipocampo ↓</h3>
+                    <p>Sobregeneralización del miedo.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>TEPT: Criterios DSM-5</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>1. Reexperimentación</h3>
+                    <ul class="list-icon">
+                        <li>Recuerdos intrusivos.</li>
+                        <li>Pesadillas.</li>
+                        <li>Flashbacks.</li>
+                    </ul>
+                </div>
+                <div class="card secondary">
+                    <h3>2. Evitación</h3>
+                    <ul class="list-icon">
+                        <li>Lugares/personas.</li>
+                        <li>Pensamientos/emociones.</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <h3>3. Cognitivo-Afectivo</h3>
+                    <ul class="list-icon">
+                        <li>Amnesia disociativa.</li>
+                        <li>Culpa, entumecimiento.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>4. Hiperarousal</h3>
+                    <ul class="list-icon">
+                        <li>Insomnio, irritabilidad.</li>
+                        <li>Hipervigilancia.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>TEPT Complejo (CIE-11)</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <h3>Definición</h3>
+                    <p>TEPT + 3 síntomas adicionales (trauma crónico).</p>
+                    <ul class="list-icon">
+                        <li>Dificultad relacional.</li>
+                        <li>Autoconcepto negativo estable.</li>
+                        <li>Desregulación afectiva.</li>
+                    </ul>
+                </div>
+                <div class="card secondary">
+                    <h3>Diferencial con TLP</h3>
+                    <ul class="list-icon">
+                        <li><strong>Autoimagen:</strong> Negativa estable (vs. Inestable).</li>
+                        <li><strong>Relaciones:</strong> Evitación (vs. Caóticas).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>TEPT: Tratamiento</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Psicoterapia (Gold Standard)</h3>
+                    <ul class="list-icon">
+                        <li>TCC Centrada en Trauma.</li>
+                        <li>Exposición Narrativa (NET).</li>
+                        <li>EMDR.</li>
+                    </ul>
+                    <p><strong>Sin psicoterapia no mejora.</strong></p>
+                </div>
+                <div class="card secondary">
+                    <h3>Farmacoterapia</h3>
+                    <ul class="list-icon">
+                        <li>ISRS (Fluoxetina, Paroxetina).</li>
+                        <li><strong>Potenciadores:</strong> Prazosina (pesadillas), Risperidona.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 3: TEPT</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Hombre de 30 años. Asalto violento hace 2 meses. Pesadillas, flashbacks, evita transporte, insomnio.</p>
+                    <p><strong>Identificar:</strong> >1 mes, 4 dimensiones.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> TEPT.</p>
+                    <p><strong>Conducta:</strong> Psicoterapia (TCC trauma). ISRS. Prazosina.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 4: TEPT Complejo</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Mujer de 22 años. Abuso infantil. Recuerdos intrusivos, "soy un fracaso", desregulación, evita relaciones.</p>
+                    <p><strong>Identificar:</strong> Trauma crónico + TEPT + autoconcepto negativo.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> TEPT Complejo.</p>
+                    <p><strong>Conducta:</strong> Psicoterapia especializada largo plazo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MÓDULO 3: ANSIEDAD ==================== -->
+        <div class="slide">
+            <h1>Ansiedad: Generalidades</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Normal</h3>
+                    <ul class="list-icon">
+                        <li>Adaptativa.</li>
+                        <li>Egosintónica.</li>
+                        <li>Reactiva a peligro real.</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <h3>Patológica</h3>
+                    <ul class="list-icon">
+                        <li>Desproporcionada.</li>
+                        <li>Sostenida sin motivo.</li>
+                        <li>Interfiere funcionalidad.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>TAG: Criterios y Tratamiento</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Criterios</h3>
+                    <p>≥6 meses, difícil de controlar, ≥3 síntomas (inquietud, fatiga, concentración, irritabilidad, tensión, insomnio).</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Tratamiento</h3>
+                    <p>ISRS + TCC. Concepto de <strong>Metapreocupación</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Trastorno de Pánico y Agorafobia</h1>
+            <div class="grid-2">
+                <div class="card accent">
+                    <h3>Crisis de Pánico</h3>
+                    <p>Súbita, máximo en minutos. ≥4 síntomas (palpitaciones, disnea, miedo a morir).</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Agorafobia</h3>
+                    <p>Miedo a lugares donde escapar es difícil (transporte, multitudes). Evitación.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Fobias y TOC</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Fobia Social</h3>
+                    <p>Miedo al juicio. Tto: TCC + ISRS.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>TOC</h3>
+                    <p>Obsesión + Compulsión. Circuito OFC-Caudado. Tto: ISRS altas dosis + EPR.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 5: Pánico</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Hombre de 35 años. Crisis súbitas (palpitaciones, disnea, miedo a morir). Miedo a repetir. Dejó supermercado y metro.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Pánico con Agorafobia.</p>
+                    <p><strong>Conducta:</strong> Psicoeducación. ISRS + TCC.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 6: TOC</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Mujer de 20 años. Gérmenes, lava manos >50 veces/día, usa guantes.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> TOC.</p>
+                    <p><strong>Conducta:</strong> ISRS dosis altas + TCC (EPR).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MÓDULO 4: BIPOLAR ==================== -->
+        <div class="slide">
+            <h1>Bipolaridad: Concepto</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Kraepelin</h3>
+                    <p>Episodios maníacos/depresivos con <strong>remisión completa</strong> (ad integrum).</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Neurobiología</h3>
+                    <p>Heredabilidad 60-80%. Ritmos circadianos, BDNF.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Mania vs. Hipomanía</h1>
+            <table>
+                <tr><th>Criterio</th><th>Mania (BP I)</th><th>Hipomanía (BP II)</th></tr>
+                <tr><td>Duración</td><td>≥1 semana</td><td>≥4 días</td></tr>
+                <tr><td>Deterioro</td><td>Marcado</td><td>No marcado</td></tr>
+                <tr><td>Psicosis</td><td>Puede</td><td>No</td></tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h1>Estados Mixtos y Akiskal</h1>
+            <div class="grid-2">
+                <div class="card warning">
+                    <h3>Depresión Mixta</h3>
+                    <p>Depresión + ≥3 síntomas maníacos (Koukopoulos). Alto riesgo suicida.</p>
+                </div>
+                <div class="card purple">
+                    <h3>Regla de los 3</h3>
+                    <p>Sospechar bipolaridad si hay >3 episodios, matrimonios, fracasos terapéuticos, profesiones.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 7: Bipolar I</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Hombre de 25 años. 10 días durmiendo 2h, verborrea, proyectos grandiosos, gastos, dice ser Dios.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Bipolar I (manía con psicosis).</p>
+                    <p><strong>Conducta:</strong> Hospitalizar. Litio/Valproato + Atípico.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 8: Bipolar II</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Mujer de 30 años. Depresión actual. "Rachas" de 4 días de energía. 3 fracasos antidepresivos.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Bipolar II.</p>
+                    <p><strong>Conducta:</strong> Suspender antidepresivos. Litio/Lamotrigina.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== MÓDULO 5: PSICOSIS ==================== -->
+        <div class="slide">
+            <h1>Psicosis: Las 4 A de Bleuler</h1>
+            <div class="grid-2">
+                <div class="card"><h3>Asociación Laxa</h3><p>Pensamiento incoherente.</p></div>
+                <div class="card secondary"><h3>Afectividad Embotada</h3><p>Aplanamiento emocional.</p></div>
+                <div class="card accent"><h3>Autismo</h3><p>Retraimiento.</p></div>
+                <div class="card"><h3>Ambivalencia</h3><p>Ideas contradictorias.</p></div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Delirios y Alucinaciones</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Delirios</h3>
+                    <p>Certeza absoluta. Capgras (impostor), Cotard (muerto), Frégoli (conocido).</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Alucinaciones</h3>
+                    <p>Auditivas (esquizofrenia), Visuales (orgánico). Pseudoalucinaciones (con insight).</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Vías Dopaminérgicas</h1>
+            <table>
+                <tr><th>Vía</th><th>Alteración</th><th>Efecto Fármacos</th></tr>
+                <tr><td>Mesolímbica</td><td>Hiperactividad</td><td>↓ psicosis</td></tr>
+                <tr><td>Mesocortical</td><td>Hipofunción</td><td>↑ síntomas negativos</td></tr>
+                <tr><td>Nigroestriatal</td><td>Control motor</td><td>Extrapiramidalismo</td></tr>
+                <tr><td>Tuberoinfundibular</td><td>Inhibe prolactina</td><td>Hiperprolactinemia</td></tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h1>Diferencial por Duración</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <ul class="list-icon">
+                        <li><strong>Breve:</strong> >1 día, <1 mes.</li>
+                        <li><strong>Esquizofreniforme:</strong> >1 mes, <6 meses.</li>
+                        <li><strong>Esquizofrenia:</strong> >6 meses.</li>
+                    </ul>
+                </div>
+                <div class="card secondary">
+                    <ul class="list-icon">
+                        <li><strong>Esquizoafectivo:</strong> Psicosis persiste.</li>
+                        <li><strong>Delirante:</strong> >40 años, sin deterioro.</li>
+                        <li><strong>Orgánica:</strong> Inicio agudo.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 9: Esquizofrenia</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Hombre de 20 años. 6 meses aislado, no se baña. "Ondas al cerebro". Afecto plano, sin insight.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Esquizofrenia.</p>
+                    <p><strong>Conducta:</strong> Antipsicótico atípico. Psicoeducación.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 10: Orgánica</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Hombre de 45 años. 3 días confuso, ve insectos, agitado, fiebre, nuevo fármaco.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Delirium (orgánico).</p>
+                    <p><strong>Conducta:</strong> Hospitalizar, exámenes, tratar causa.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 11: Paranoia</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Mujer de 50 años. 1 año creyendo que vecino envenena. Cámaras. Sin alucinaciones. Vida normal.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Trastorno Delirante (Paranoia).</p>
+                    <p><strong>Conducta:</strong> Alianza terapéutica. Antipsicótico dosis bajas.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDES COMPLEMENTARIAS PARA LLEGAR A 57 -->
+        
+        <div class="slide">
+            <h1>Manejo de la Psicosis</h1>
+            <table>
+                <tr><th>Fármaco</th><th>Dosis</th><th>Notas</th></tr>
+                <tr><td>Risperidona</td><td>1-9 mg/día</td><td>Primera línea</td></tr>
+                <tr><td>Olanzapina</td><td>2.5-30 mg/día</td><td>↑ peso</td></tr>
+                <tr><td>Quetiapina</td><td>25-600 mg/día</td><td>Sedante</td></tr>
+                <tr><td>Clozapina</td><td>100-900 mg/día</td><td>Refractario, riesgo agranulocitosis</td></tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h1>Síntomas de Primer Rango (Schneider)</h1>
+            <div class="card" style="width: 100%;">
+                <ul class="list-icon">
+                    <li><strong>Percepción delirante:</strong> Significado delirante a algo real.</li>
+                    <li><strong>Inserción/robo del pensamiento.</strong></li>
+                    <li><strong>Fenómenos de pasividad:</strong> Otros controlan mi cuerpo/voluntad.</li>
+                    <li><strong>Voces que comentan o discuten.</strong></li>
+                    <li><strong>Sonorización del pensamiento.</strong></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Perlas Diagnósticas</h1>
+            <div class="grid-2">
+                <div class="card warning">
+                    <h3>Reglas de Oro</h3>
+                    <ul class="list-icon">
+                        <li>Consumo + psicosis = Psicosis por sustancias.</li>
+                        <li>>40 años + debut = Orgánico.</li>
+                        <li>>60 años = Demencia.</li>
+                        <li>Insight presente = Pseudoalucinación.</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <h3>Tratamiento</h3>
+                    <ul class="list-icon">
+                        <li>TEC en melancolía/catatonía.</li>
+                        <li>Psicoterapia en TEPT.</li>
+                        <li>Litio en Bipolar.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Resumen Integrador</h1>
+            <table>
+                <tr><th>Trastorno</th><th>Síntoma Clave</th><th>Tratamiento</th></tr>
+                <tr><td>Depresión Melancólica</td><td>Inhibición severa</td><td>TEC</td></tr>
+                <tr><td>TEPT</td><td>Reexperimentación</td><td>Psicoterapia</td></tr>
+                <tr><td>Pánico</td><td>Crisis + miedo a morir</td><td>ISRS + TCC</td></tr>
+                <tr><td>Bipolar I</td><td>Mania con deterioro</td><td>Litio</td></tr>
+                <tr><td>Esquizofrenia</td><td>Quiebre vital</td><td>Antipsicóticos</td></tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h1>Curso: Afectivo vs. Psicótico</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Trastornos Afectivos</h3>
+                    <ul class="list-icon">
+                        <li>Episódicos.</li>
+                        <li>Remisión completa (ad integrum).</li>
+                    </ul>
+                </div>
+                <div class="card accent">
+                    <h3>Esquizofrenia</h3>
+                    <ul class="list-icon">
+                        <li>Crónica.</li>
+                        <li>Quiebre vital.</li>
+                        <li>Deterioro funcional.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Caso Clínico 12: Mixto</h1>
+            <div class="case-container">
+                <div class="case-vignette">
+                    <span class="badge blue">Anamnesis</span>
+                    <h3>Paciente</h3>
+                    <p>Hombre de 40 años. Tristeza profunda, pero no puede quedarse quieto, habla rápido, irritable, insomnio de conciliación.</p>
+                </div>
+                <div class="case-solution">
+                    <h3>Resolución Clínica</h3>
+                    <p><strong>Diagnóstico:</strong> Depresión Mixta.</p>
+                    <p><strong>Conducta:</strong> Evaluar riesgo suicida. No usar antidepresivos solos. Iniciar estabilizador.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>El Peligro de la Medicalización</h1>
+            <div class="card" style="width: 100%;">
+                <p>El DSM-5 usado como checklist sobredimensiona la depresión. Ejemplo: en época de exámenes, cualquier estudiante cumple 4-5 criterios (fatiga, insomnio, concentración).</p>
+                <p><strong>Consecuencia:</strong> Se medicaliza la salud mental. Siempre evaluar el contexto y la funcionalidad.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Antidepresivos: ISRS</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Mecanismo</h3>
+                    <p>Bloquean el transportador de serotonina (SERT), aumentando la 5-HT en la hendidura sináptica.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Efectos Adversos</h3>
+                    <ul class="list-icon">
+                        <li>Náuseas, cefalea (transitorios).</li>
+                        <li>Disfunción sexual (largo plazo).</li>
+                        <li>Síndrome serotoninérgico (raro).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Litioterapia: Monitoreo</h1>
+            <div class="card warning" style="width: 100%;">
+                <p>El litio tiene un margen terapéutico estrecho. Requiere monitoreo de litemia, función renal y tiroidea.</p>
+                <p><strong>Toxicidad:</strong> Temblor grueso, ataxia, vómitos, diarrea, confusión.</p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Alucinaciones Visuales</h1>
+            <div class="card accent" style="width: 100%;">
+                <p>En psiquiatría, las alucinaciones visuales son raras. Siempre sugieren <strong>causa orgánica</strong>:</p>
+                <ul class="list-icon">
+                    <li>Demencias (cuerpos de Lewy).</li>
+                    <li>Encefalitis.</li>
+                    <li>Tumores cerebrales.</li>
+                    <li>Sustancias (alucinógenos, delirium tremens).</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Catatonía</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Signos</h3>
+                    <ul class="list-icon">
+                        <li>Estupor (mutismo, inmovilidad).</li>
+                        <li>Flexibilidad céreo (mantiene postura).</li>
+                        <li>Negativismo (rechaza alimentación).</li>
+                    </ul>
+                </div>
+                <div class="card secondary">
+                    <h3>Causas</h3>
+                    <p>Depresión melancólica, esquizofrenia, causas orgánicas.</p>
+                    <p><strong>Tratamiento urgente:</strong> TEC o benzodiacepinas.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Riesgo Suicida: Evaluación</h1>
+            <div class="card accent" style="width: 100%;">
+                <ul class="list-icon">
+                    <li><strong>Ideación:</strong> Pasiva (deseo de morir) vs. Activa (plan).</li>
+                    <li><strong>Plan:</strong> Método, letalidad, acceso a medios.</li>
+                    <li><strong>Factores:</strong> Intentos previos, desesperanza, aislamiento.</li>
+                    <li><strong>Conducta:</strong> Si hay riesgo alto, hospitalización inmediata.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Trastorno Esquizoafectivo</h1>
+            <div class="card" style="width: 100%;">
+                <p>Coexistencia de síntomas psicóticos y afectivos (manía o depresión).</p>
+                <p><strong>Diferencia clave:</strong> La psicosis persiste por ≥2 semanas en ausencia de síntomas afectivos significativos.</p>
+                <p><em>Si los síntomas psicóticos desaparecen al remitir el ánimo, es un trastorno afectivo con síntomas psicóticos.</em></p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Fobia Específica</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Clínica</h3>
+                    <p>Miedo intenso a un objeto/situación (animales, alturas, sangre). Reacción adrenérgica al exponerse.</p>
+                </div>
+                <div class="card secondary">
+                    <h3>Tratamiento</h3>
+                    <p>TCC con exposición gradual. Fármacos no son útiles.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h1>Diferencias Clave: TOC vs. TEPT</h1>
+            <table>
+                <tr><th>Aspecto</th><th>TOC</th><th>TEPT</th></tr>
+                <tr><td>Origen</td><td>Pensamiento intrusivo</td><td>Evento traumático</td></tr>
+                <tr><td>Compulsión</td><td>Ritual para bajar ansiedad</td><td>Evitación</td></tr>
+                <tr><td>Neurobiología</td><td>OFC-Caudado</td><td>Amígdala-Hipocampo</td></tr>
+            </table>
+        </div>
+
+        <div class="slide">
+            <h1>Conclusión</h1>
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center;">
+                <h1 style="border: none; font-size: 2.5rem; color: var(--primary);">¡Mucho Éxito!</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-top: 1rem; max-width: 80%;">
+                    Has completado las 57 diapositivas de estudio. Recuerda que en psiquiatría el diagnóstico es clínico y la entrevista es tu mejor herramienta.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CONTROLES -->
+    <div class="slide-counter" id="counter">1 / 57</div>
+    <div class="controls">
+        <button onclick="toggleFullScreen()" id="fs-btn" title="Pantalla Completa">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+            </svg>
+        </button>
+        <button onclick="changeSlide(-1)">←</button>
+        <button onclick="changeSlide(1)">→</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+        const progress = document.getElementById('progress');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                    slide.scrollTop = 0;
+                }
+            });
+            counter.textContent = `${index + 1} / ${slides.length}`;
+            progress.style.width = (((index + 1) / slides.length) * 100) + '%';
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            showSlide(currentSlide);
+        }
+
+        // Teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                changeSlide(-1);
+            }
+        });
+
+        // Swipe táctil
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, {passive: true});
+
+        document.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 60) {
+                if (diffX > 0) changeSlide(1);
+                else changeSlide(-1);
+            }
+        }, {passive: true});
+
+        // Pantalla completa multiplataforma (iOS, Android, Chrome)
+        function toggleFullScreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen().catch(err => console.log(err));
+                } else if (elem.webkitRequestFullscreen) { /* Safari */
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) { /* IE11 */
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) { /* Safari */
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { /* IE11 */
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        // Inicializar contador dinámico
+        document.addEventListener('DOMContentLoaded', () => {
+            showSlide(0);
+        });
+    </script>
+</body>
+</html>
